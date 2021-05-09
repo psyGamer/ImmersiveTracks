@@ -1,52 +1,38 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
-import dev.psyGamer.immersiveTracks.blocks.SignalBlock;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignalTileEntity extends TileEntity {
 	
-	private boolean active = false;
+	private final Map<Integer, Integer> lightBulbs = new HashMap<>();
 	
-	public boolean isActive() {
-		return active;
-	}
-	
-	public void toggleActive() {
-		active = !active;
+	public void setBulbColor(int bulbIndex, int bulbColor) {
+		lightBulbs.put(bulbIndex, bulbColor);
 		
 		markDirty();
-//		shouldRefresh(world, getPos(), world.getBlockState(getPos()), world.getBlockState(getPos()));
+		world.markBlockRangeForRenderUpdate(getPos(), getPos());
 	}
-	
-	public float getYRotation() {
-		IBlockState state = world.getBlockState(getPos());
+	public int getBulbColor(int bulbIndex) {
+		if (!lightBulbs.containsKey(bulbIndex))
+			return 0x00000;
 		
-		if (!(state.getBlock() instanceof SignalBlock)) {
-			return 0;
-		}
-		
-		switch(state.getValue(SignalBlock.FACING)) {
-			case EAST:
-				return 270;
-			case SOUTH:
-				return 180;
-			case WEST:
-				return 90;
-			case NORTH:
-			default:
-				return 0;
-		}
+		return lightBulbs.get(bulbIndex);
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setBoolean("active", active);
+		compound.setInteger("bulbs", lightBulbs.size());
+		
+		lightBulbs.forEach((index, color) -> {
+			compound.setInteger("bulb_" + index, color);
+		});
 		
 		return super.writeToNBT(compound);
 	}
@@ -55,7 +41,11 @@ public class SignalTileEntity extends TileEntity {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		active = compound.getBoolean("active");
+		final int bulbs = compound.getInteger("bulbs");
+		
+		for (int i = 0; i < bulbs; i++){
+			lightBulbs.put(i, compound.getInteger("bulb_" + i));
+		}
 	}
 	
 	@Override

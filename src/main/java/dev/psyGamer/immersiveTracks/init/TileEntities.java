@@ -1,8 +1,7 @@
 package dev.psyGamer.immersiveTracks.init;
 
-import dev.psyGamer.immersiveTracks.Main;
+import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.tileEntity.*;
-import dev.psyGamer.immersiveTracks.tileEntity.render.*;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -22,13 +21,13 @@ public class TileEntities {
 		for (Class tileEntityClass : tileEntities.keySet()) {
 			String tileEntityName  = tileEntities.get(tileEntityClass);
 			
-			GameRegistry.registerTileEntity(tileEntityClass, new ResourceLocation(Main.MOD_ID, tileEntityName));
+			GameRegistry.registerTileEntity(tileEntityClass, new ResourceLocation(ImmersiveTracks.MODID, tileEntityName));
 		}
 	}
 	
 	public static void registerTESRs() {
 		final Map<Class, TileEntitySpecialRenderer> tileEntitySpecialRenderers = new HashMap() {{
-//			put(SignalTileEntity.class, new SignalTESR());
+			// No TESRs yet //
 		}};
 		
 		for (Class tileEntityClass : tileEntitySpecialRenderers.keySet()) {

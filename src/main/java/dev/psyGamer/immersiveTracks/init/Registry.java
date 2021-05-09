@@ -1,24 +1,20 @@
 package dev.psyGamer.immersiveTracks.init;
 
-import dev.psyGamer.immersiveTracks.Main;
-import dev.psyGamer.immersiveTracks.blocks.SignalBlock;
-import dev.psyGamer.immersiveTracks.init.Blocks;
-import dev.psyGamer.immersiveTracks.init.Items;
+import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 
+import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
 import dev.psyGamer.immersiveTracks.util.IHasModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.block.Block;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -60,12 +56,12 @@ public class Registry {
 			return;
 		}
 		
-		event.getMap().registerSprite(new ResourceLocation(Main.MOD_ID, "blocks/bulb"));
+		event.getMap().registerSprite(new ResourceLocation(ImmersiveTracks.MODID, "blocks/bulb"));
 	}
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerBlockColors() {
 		System.out.println("BLOCK COLORS");
-		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(SignalBlock::getTintColor, Blocks.SIGNAL);
+		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> SignalBlockBase.getBulbColor(worldIn, pos, tintIndex - 10), Blocks.SIGNAL);
 	}
 }

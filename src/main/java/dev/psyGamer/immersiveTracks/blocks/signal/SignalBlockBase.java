@@ -1,40 +1,33 @@
-package dev.psyGamer.immersiveTracks.blocks;
+package dev.psyGamer.immersiveTracks.blocks.signal;
 
+import dev.psyGamer.immersiveTracks.ImmersiveTracks;
+import dev.psyGamer.immersiveTracks.blocks.BlockBase;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 @SuppressWarnings("deprecation")
-public class SignalBlock extends BlockBase {
+public class SignalBlockBase extends BlockBase {
 	
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
-	public SignalBlock() {
-		super("signal", Material.IRON, CreativeTabs.MISC);
+	public static final int getBulbColor(IBlockAccess world, BlockPos pos, int bulbIndex) {
+		if (bulbIndex < 0)
+			return 0xFFFFFF;
+		
+		return ((SignalTileEntity) world.getTileEntity(pos)).getBulbColor(bulbIndex);
 	}
 	
-	public static int getTintColor(IBlockState state, IBlockAccess world, BlockPos pos, int tintIndex) {
-		System.out.println(tintIndex);
-		SignalTileEntity tileEntity = (SignalTileEntity) world.getTileEntity(pos);
-		
-		if (tintIndex == 10) {
-			return tileEntity.isActive() ? 0x00FF00 : 0xFF0000;
-		} else {
-			return 0xFFFFFF;
-		}
+	public SignalBlockBase(String name) {
+		super(name, Material.IRON, ImmersiveTracks.SIGNALS_TAB);
 	}
 	
 	@Override
@@ -48,15 +41,6 @@ public class SignalBlock extends BlockBase {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		SignalTileEntity tileEntity = (SignalTileEntity) worldIn.getTileEntity(pos);
-		tileEntity.toggleActive();
-		worldIn.markBlockRangeForRenderUpdate(pos, pos);
-		
-		return true;
-	}
-	
-	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
@@ -66,7 +50,6 @@ public class SignalBlock extends BlockBase {
 		return new BlockStateContainer(this, FACING);
 	}
 	
-	@Nullable
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new SignalTileEntity();

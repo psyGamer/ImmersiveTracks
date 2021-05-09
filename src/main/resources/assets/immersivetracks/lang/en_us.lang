@@ -1,1 +1,5 @@
-tile.signal.name=Signal
+# Blocks
+tile.immersivetracks.signal.name=Signal
+
+# Creative Tabs
+itemGroup.immersivetracks.signals=Train Signals
