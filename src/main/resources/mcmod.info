@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "immersivetracks",
+    "name": "Immersive Tracks",
+    "description": "A mod created to make you railroad more immersive.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["psyGamer"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
