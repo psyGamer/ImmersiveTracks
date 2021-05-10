@@ -1,8 +1,11 @@
 package dev.psyGamer.immersiveTracks.init;
 
+import dev.psyGamer.immersiveTracks.ImmersiveTracks;
+import dev.psyGamer.immersiveTracks.blocks.BlockBase;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
-import dev.psyGamer.immersiveTracks.blocks.signal.SignalController;
+import dev.psyGamer.immersiveTracks.blocks.signal.SignalControllerBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,6 @@ public class Blocks {
 	}
 	
 	public static final Block SIGNAL = new SignalBlockBase("signal");
-	public static final Block SIGNAL_POLE = new SignalBlockBase("signal_pole");
-	public static final Block SIGNAL_CONTROLLER = new SignalController();
+	public static final Block SIGNAL_POLE = new BlockBase("signal_pole", Material.IRON, ImmersiveTracks.SIGNALS_TAB);
+	public static final Block SIGNAL_CONTROLLER = new SignalControllerBlock();
 }

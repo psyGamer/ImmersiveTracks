@@ -3,6 +3,7 @@ package dev.psyGamer.immersiveTracks.blocks.signal;
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.BlockBase;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -73,5 +74,12 @@ public class SignalBlockBase extends BlockBase {
 	@Override
 	public boolean causesSuffocation(IBlockState state) {
 		return false;
+	}
+	
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		System.out.println("neigh ch");
+		
+		SignalControllerBlock.removeSignalFromCache(worldIn, pos);
 	}
 }
