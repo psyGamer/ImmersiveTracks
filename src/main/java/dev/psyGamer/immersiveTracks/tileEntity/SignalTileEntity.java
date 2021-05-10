@@ -13,7 +13,7 @@ public class SignalTileEntity extends TileEntityBase {
 		lightBulbs.put(bulbIndex, bulbColor);
 		
 		markDirty();
-		world.markBlockRangeForRenderUpdate(getPos(), getPos());
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
 	}
 	public int getBulbColor(int bulbIndex) {
 		if (!lightBulbs.containsKey(bulbIndex))

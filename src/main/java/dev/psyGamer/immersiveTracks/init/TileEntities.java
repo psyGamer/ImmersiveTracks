@@ -16,7 +16,6 @@ public class TileEntities {
 	public static void registerTileEntities() {
 		final Map<Class, String> tileEntities = new HashMap() {{
 			put(SignalTileEntity.class, "signal");
-			put(SignalControllerTileEntity.class, "signal_controller");
 		}};
 		
 		for (Class tileEntityClass : tileEntities.keySet()) {

@@ -41,4 +41,8 @@ public class RedstoneUtil {
 		
 		return sidePower;
 	}
+	
+	public static boolean isBlockPowered(World world, BlockPos pos) {
+		return getPoweredSides(world, pos).values().contains(true);
+	}
 }

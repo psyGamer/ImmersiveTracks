@@ -6,7 +6,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 
 import net.minecraft.tileentity.TileEntity;
 
-public abstract class TileEntityBase extends TileEntity {
+public class TileEntityBase extends TileEntity {
 	
 	@Override
 	public NBTTagCompound getUpdateTag() {
@@ -20,7 +20,7 @@ public abstract class TileEntityBase extends TileEntity {
 	
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(getPos(), 0, getUpdateTag());
+		return new SPacketUpdateTileEntity(getPos(), 1, getUpdateTag());
 	}
 	
 	@Override

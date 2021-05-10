@@ -19,5 +19,6 @@ public class Blocks {
 	}
 	
 	public static final Block SIGNAL = new SignalBlockBase("signal");
+	public static final Block SIGNAL_POLE = new SignalBlockBase("signal_pole");
 	public static final Block SIGNAL_CONTROLLER = new SignalController();
 }
