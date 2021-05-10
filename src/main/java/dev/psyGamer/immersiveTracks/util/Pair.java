@@ -1,5 +1,13 @@
 package dev.psyGamer.immersiveTracks.util;
 
+/**
+ * A utility class copied from a client side package to make it also available to the server. <br> <br>
+ *
+ * @author Mojang
+ * @version 1.0
+ * @since 1.0
+ * @see com.mojang.realmsclient.util.Pair Mojang's Pair
+ */
 public class Pair<A, B> {
 	private final A first;
 	private final B second;

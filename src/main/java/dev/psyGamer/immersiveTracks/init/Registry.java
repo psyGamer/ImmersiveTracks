@@ -1,22 +1,21 @@
 package dev.psyGamer.immersiveTracks.init;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
-
+import dev.psyGamer.immersiveTracks.util.IModelRegistry;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
-import dev.psyGamer.immersiveTracks.util.IHasModel;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.item.Item;
 import net.minecraft.block.Block;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
+
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 @Mod.EventBusSubscriber
 public class Registry {
@@ -38,14 +37,14 @@ public class Registry {
 		System.out.println("MODELS");
 		
 		for (Item item : Items.getItems()) {
-			if (item instanceof IHasModel) {
-				((IHasModel) item).registerModel();
+			if (item instanceof IModelRegistry) {
+				((IModelRegistry) item).registerModel();
 			}
 		}
 		
 		for (Block block : Blocks.getBlocks()) {
-			if (block instanceof IHasModel) {
-				((IHasModel) block).registerModel();
+			if (block instanceof IModelRegistry) {
+				((IModelRegistry) block).registerModel();
 			}
 		}
 	}

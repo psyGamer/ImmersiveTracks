@@ -4,6 +4,7 @@ import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.BlockBase;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalControllerBlock;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 

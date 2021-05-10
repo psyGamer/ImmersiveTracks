@@ -1,34 +1,34 @@
 package dev.psyGamer.immersiveTracks.blocks.signal;
 
-import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.ModConfig;
-import dev.psyGamer.immersiveTracks.blocks.BlockBase;
-import dev.psyGamer.immersiveTracks.init.Blocks;
-import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
-
+import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.util.Pair;
 import dev.psyGamer.immersiveTracks.util.RedstoneUtil;
+import dev.psyGamer.immersiveTracks.init.Blocks;
+import dev.psyGamer.immersiveTracks.blocks.BlockBase;
+import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nullable;
+import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class SignalControllerBlock extends BlockBase {
 	
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 	
+	/* The signals are cache to reduce the lag produced by checking if a signal is above a controller. */
 	private static final Map<Pair<World, BlockPos>,  BlockPos> signalCache = new HashMap<>();
 	
 	public SignalControllerBlock() {
@@ -58,7 +58,7 @@ public class SignalControllerBlock extends BlockBase {
 	}
 	
 	@Override
-	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable EnumFacing side) {
+	public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return side != null && side != EnumFacing.UP && side != EnumFacing.DOWN;
 	}
 	

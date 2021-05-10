@@ -6,8 +6,8 @@ import dev.psyGamer.immersiveTracks.tileEntity.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.util.Map;
 import java.util.HashMap;

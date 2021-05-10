@@ -1,10 +1,12 @@
 package dev.psyGamer.immersiveTracks.proxy;
 
 import dev.psyGamer.immersiveTracks.init.TileEntities;
+
 import net.minecraft.item.Item;
+
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class CommonProxy {
 

@@ -6,6 +6,16 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 
 import net.minecraft.tileentity.TileEntity;
 
+/**
+ * A base class for all TileEntities. <br>
+ * It implements all needed methods. <br>
+ * Note: You still need to register it in {@link dev.psyGamer.immersiveTracks.init.TileEntities TileEntities} <br> <br>
+ *
+ * @author psyGamer
+ * @version 1.0
+ * @since 1.0
+ * @see TileEntity
+ */
 public class TileEntityBase extends TileEntity {
 	
 	@Override

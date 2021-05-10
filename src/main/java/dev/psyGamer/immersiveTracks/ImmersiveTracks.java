@@ -2,13 +2,14 @@ package dev.psyGamer.immersiveTracks;
 
 import dev.psyGamer.immersiveTracks.creativeTabs.SignalTab;
 import dev.psyGamer.immersiveTracks.proxy.CommonProxy;
+
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraftforge.common.config.Config;
+
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = ImmersiveTracks.MODID, name = ImmersiveTracks.NAME, version = "Development")
 public class ImmersiveTracks {

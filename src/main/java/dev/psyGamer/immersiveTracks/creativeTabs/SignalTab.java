@@ -1,13 +1,14 @@
 package dev.psyGamer.immersiveTracks.creativeTabs;
 
 import dev.psyGamer.immersiveTracks.init.Blocks;
-import net.minecraft.creativetab.CreativeTabs;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.creativetab.CreativeTabs;
 
 public class SignalTab extends CreativeTabs {
 	
 	public SignalTab() {
-		super("signals");
+		super("immersivetracks.signals");
 	}
 	
 	@Override
