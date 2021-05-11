@@ -29,7 +29,7 @@ public class SignalControllerBlock extends BlockBase {
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 	
 	/* The signals are cache to reduce the lag produced by checking if a signal is above a controller. */
-	private static final Map<Pair<World, BlockPos>,  BlockPos> signalCache = new HashMap<>();
+	private static final Map<Pair<World, BlockPos>,  Integer> signalCache = new HashMap<>();
 	
 	public SignalControllerBlock() {
 		super("signal_controller", Material.IRON, ImmersiveTracks.SIGNALS_TAB);
@@ -69,19 +69,25 @@ public class SignalControllerBlock extends BlockBase {
 		updateSignal(worldIn, pos);
 	}
 	
-	public static void removeSignalFromCache(World world, BlockPos signal) {
-		if (signalCache.containsValue(signal))
-			signalCache.forEach((controllerPos, signalPos) -> {
-				if (controllerPos.first() == world && signalPos == signal)
+	public static void removeSignalFromCache(World world, BlockPos pos, boolean isSignal) {
+		if (isSignal && signalCache.containsValue(pos))
+			signalCache.forEach((controllerPos, signalYOffset) -> {
+				if (controllerPos.first() == world && controllerPos.second().getY() + signalYOffset == pos.getY())
 					signalCache.remove(controllerPos);
 			});
+		else if(!isSignal && signalCache.containsKey(pos))
+			signalCache.remove(pos);
+		
 	}
 	
 	private static void updateSignal(World world, BlockPos pos) {
+		if (!world.isBlockLoaded(pos))
+			removeSignalFromCache(world, pos, false);
+		
 		SignalTileEntity signal = getSignal(world, pos);
 		
 		if (signal != null) {
-			signalCache.put(Pair.of(world, pos), signal.getPos());
+			signalCache.put(Pair.of(world, pos), signal.getPos().getY() - pos.getY());
 			
 			signal.setBulbColor(0, world.getBlockState(pos).getValue(ACTIVE) ? 0x222222 : 0xEE0000);
 			signal.setBulbColor(1, world.getBlockState(pos).getValue(ACTIVE) ? 0x00EE00 : 0x222222);
@@ -90,7 +96,7 @@ public class SignalControllerBlock extends BlockBase {
 	
 	private static SignalTileEntity getSignal(World world, BlockPos pos) {
 		if (signalCache.containsKey(Pair.of(world, pos))) {
-			TileEntity tileEntity = world.getTileEntity(signalCache.get(Pair.of(world, pos)));
+			TileEntity tileEntity = world.getTileEntity(pos.up(signalCache.get(Pair.of(world, pos))));
 			
 			if (tileEntity instanceof SignalTileEntity)
 				return (SignalTileEntity) tileEntity;
@@ -105,6 +111,8 @@ public class SignalControllerBlock extends BlockBase {
 					
 				if (block == Blocks.SIGNAL_POLE) {
 					for (int poleYCheck = controllerYCheck ; poleYCheck < controllerYCheck + ModConfig.Signals.maxSignalHeight ; poleYCheck++) {
+						block = world.getBlockState(pos.up(poleYCheck)).getBlock();
+						
 						if (block == Blocks.SIGNAL)
 							return (SignalTileEntity) world.getTileEntity(pos.up(poleYCheck));
 					}
@@ -119,6 +127,6 @@ public class SignalControllerBlock extends BlockBase {
 	
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		signalCache.clear();
+		signalCache.clear(); // Clears the cache to avoid having
 	}
 }

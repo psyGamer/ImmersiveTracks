@@ -81,6 +81,6 @@ public class SignalBlockBase extends BlockBase {
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		System.out.println("neigh ch");
 		
-		SignalControllerBlock.removeSignalFromCache(worldIn, pos);
+		SignalControllerBlock.removeSignalFromCache(worldIn, pos, true);
 	}
 }
