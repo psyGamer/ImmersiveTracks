@@ -89,11 +89,4 @@ public class SignalBlockBase extends BlockBase {
 	public boolean causesSuffocation(IBlockState state) {
 		return false;
 	}
-	
-	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		System.out.println("neigh ch");
-		
-		SignalControllerBlock.removeSignalFromCache(worldIn, pos, true);
-	}
 }

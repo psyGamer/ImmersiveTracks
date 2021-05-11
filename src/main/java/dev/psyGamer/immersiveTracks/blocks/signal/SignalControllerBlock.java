@@ -2,7 +2,6 @@ package dev.psyGamer.immersiveTracks.blocks.signal;
 
 import dev.psyGamer.immersiveTracks.ModConfig;
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
-import dev.psyGamer.immersiveTracks.util.Pair;
 import dev.psyGamer.immersiveTracks.util.RedstoneUtil;
 import dev.psyGamer.immersiveTracks.init.Blocks;
 import dev.psyGamer.immersiveTracks.blocks.BlockBase;
@@ -13,23 +12,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.Random;
-import java.util.HashMap;
-import java.util.Map;
-
 @SuppressWarnings("deprecation")
 public class SignalControllerBlock extends BlockBase {
 	
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
-	
-	/* The signals are cache to reduce the lag produced by checking if a signal is above a controller. */
-	private static final Map<Pair<World, BlockPos>,  Integer> signalCache = new HashMap<>();
 	
 	public SignalControllerBlock() {
 		super("signal_controller", Material.IRON, ImmersiveTracks.SIGNALS_TAB);
@@ -69,51 +60,19 @@ public class SignalControllerBlock extends BlockBase {
 		updateSignal(worldIn, pos);
 	}
 	
-	public static void removeSignalFromCache(World world, BlockPos pos, boolean isSignal) {
-		System.out.println("remove from cache");
-		System.out.println(isSignal);
-		
-		if(!isSignal && signalCache.containsKey(Pair.of(world, pos))) {
-			signalCache.remove(Pair.of(world, pos));
-			
-			return;
-		}
-		
-		signalCache.entrySet().stream()
-				.filter(cacheEntry ->
-						cacheEntry.getKey().first() == world
-					 && cacheEntry.getKey().second().getY() + cacheEntry.getValue() == pos.getY()
-				)
-				.findFirst()
-				.ifPresent(signalCache::remove);
-	}
-	
 	private static void updateSignal(World world, BlockPos pos) {
 		if (!world.isBlockLoaded(pos))
-			removeSignalFromCache(world, pos, false);
+			return;
 		
 		SignalTileEntity signal = getSignal(world, pos);
 		
 		if (signal != null) {
-			signalCache.put(Pair.of(world, pos), signal.getPos().getY() - pos.getY());
-			System.out.println("cached");
-			System.out.println(signalCache);
-			
 			signal.setBulbColor(0, world.getBlockState(pos).getValue(ACTIVE) ? 0x222222 : 0xEE0000);
 			signal.setBulbColor(1, world.getBlockState(pos).getValue(ACTIVE) ? 0x00EE00 : 0x222222);
 		}
 	}
 	
 	private static SignalTileEntity getSignal(World world, BlockPos pos) {
-		if (signalCache.containsKey(Pair.of(world, pos))) {
-			TileEntity tileEntity = world.getTileEntity(pos.up(signalCache.get(Pair.of(world, pos))));
-			
-			System.out.println(tileEntity instanceof SignalTileEntity);
-			
-			if (tileEntity instanceof SignalTileEntity)
-				return (SignalTileEntity) tileEntity;
-		}
-		
 		if (!world.isRemote) {
 			for (int controllerYCheck = 1 ; controllerYCheck <= ModConfig.Signals.maxControllerDepth ; controllerYCheck++) {
 				Block block = world.getBlockState(pos.up(controllerYCheck)).getBlock();
@@ -135,10 +94,5 @@ public class SignalControllerBlock extends BlockBase {
 		}
 		
 		return null;
-	}
-	
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		signalCache.clear(); // Clears the cache to avoid having
 	}
 }
