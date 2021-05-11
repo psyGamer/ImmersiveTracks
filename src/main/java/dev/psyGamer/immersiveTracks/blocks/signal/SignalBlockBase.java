@@ -9,6 +9,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
@@ -21,10 +23,11 @@ public class SignalBlockBase extends BlockBase {
 	
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
-	public static final int getBulbColor(IBlockAccess world, BlockPos pos, int bulbIndex) {
+	public static int getBulbColor(IBlockAccess world, BlockPos pos, int bulbIndex) {
 		if (bulbIndex < 0)
 			return 0xFFFFFF;
 		
+		//noinspection ConstantConditions
 		return ((SignalTileEntity) world.getTileEntity(pos)).getBulbColor(bulbIndex);
 	}
 	
@@ -50,6 +53,16 @@ public class SignalBlockBase extends BlockBase {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (!worldIn.isRemote) {
+			EnumFacing direction = EnumFacing.getDirectionFromEntityLiving(pos, placer);
+			IBlockState blockState = getDefaultState().withProperty(FACING, direction);
+			
+			worldIn.setBlockState(pos, blockState);
+		}
 	}
 	
 	@Override
