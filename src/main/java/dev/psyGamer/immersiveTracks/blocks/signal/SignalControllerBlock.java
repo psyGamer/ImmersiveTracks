@@ -86,6 +86,8 @@ public class SignalControllerBlock extends BlockBase {
 						
 						if (block == Blocks.SIGNAL)
 							return (SignalTileEntity) world.getTileEntity(pos.up(poleYCheck));
+						if (block != Blocks.SIGNAL_POLE)
+							break;
 					}
 					
 					break;
