@@ -15,27 +15,22 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 
 @Mod.EventBusSubscriber
 public class Registry {
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
-		System.out.println("ITEMS");
 		event.getRegistry().registerAll(Items.getItems());
 	}
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		System.out.println("BLOCKS");
 		event.getRegistry().registerAll(Blocks.getBlocks());
 	}
 	
 	@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
-		System.out.println("MODELS");
-		
 		for (Item item : Items.getItems()) {
 			if (item instanceof IModelRegistry) {
 				((IModelRegistry) item).registerModel();
@@ -49,18 +44,8 @@ public class Registry {
 		}
 	}
 	
-	@SubscribeEvent
-	public static void registerTextures(TextureStitchEvent.Pre event) {
-		if (!event.getMap().getBasePath().equals("textures")) {
-			return;
-		}
-		
-		event.getMap().registerSprite(new ResourceLocation(ImmersiveTracks.MODID, "blocks/bulb"));
-	}
-	
 	@SideOnly(Side.CLIENT)
 	public static void registerBlockColors() {
-		System.out.println("BLOCK COLORS");
 		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> SignalBlockBase.getBulbColor(worldIn, pos, tintIndex - 10), Blocks.SIGNAL);
 	}
 }
