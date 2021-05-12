@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"active=false": { "model": "immersivetracks:signal_controller_off" },
+		"active=true": { "model": "immersivetracks:signal_controller_on" }
+	}
+}
