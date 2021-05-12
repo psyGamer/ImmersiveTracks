@@ -29,7 +29,7 @@ public class BlockBase extends Block implements IModelRegistry {
 		
 		setCreativeTab(tab);
 		
-		Blocks.addBlock(this); // <br> <br>
+		Blocks.addBlock(this);
 		Items .addBlock(this);
 	}
 	
