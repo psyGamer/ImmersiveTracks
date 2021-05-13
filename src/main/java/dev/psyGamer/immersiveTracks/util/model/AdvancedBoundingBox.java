@@ -4,6 +4,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 
 import javax.vecmath.Vector3d;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author psyGamer
@@ -22,6 +24,10 @@ public class AdvancedBoundingBox {
 	private EnumFacing upwardRotationBase = EnumFacing.NORTH;
 	private EnumFacing downwardRotationBase = EnumFacing.NORTH;
 	
+	public AdvancedBoundingBox(final double maxX, final double maxY, final double maxZ) {
+		this(0, 0, 0, maxX, maxY, maxZ);
+	}
+	
 	/**
 	 * @author psyGamer
 	 * @version 1.0
@@ -37,13 +43,8 @@ public class AdvancedBoundingBox {
 		this.maxZ = maxZ;
 	}
 	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
-	public AdvancedBoundingBox(final Vector3d min, final Vector3d max) {
-		this(min, max, false);
+	public AdvancedBoundingBox(final Vector3d max) {
+		this(new Vector3d(0, 0, 0), max);
 	}
 	
 	/**
@@ -51,14 +52,23 @@ public class AdvancedBoundingBox {
 	 * @version 1.0
 	 * @since 1.0
 	 */
-	public AdvancedBoundingBox(final Vector3d min, final Vector3d max,
-							   final boolean immutable) {
+	public AdvancedBoundingBox(final Vector3d min, final Vector3d max) {
 		this.minX = min.x;
 		this.minY = min.y;
 		this.minZ = min.z;
 		this.maxX = max.x;
 		this.maxY = max.y;
 		this.maxZ = max.z;
+	}
+	
+	public Map<EnumFacing, AxisAlignedBB> generateRotationMap() {
+		final Map<EnumFacing, AxisAlignedBB> rotationMap = new HashMap();
+		
+		for (final EnumFacing rotation : EnumFacing.values()) {
+			rotationMap.put(rotation, this.rotate(rotation).getBoundingBox());
+		}
+		
+		return rotationMap;
 	}
 	
 	/**
@@ -153,15 +163,19 @@ public class AdvancedBoundingBox {
 		);
 	}
 	
+	public AdvancedBoundingBox center() {
+		return this.center(true, true, true);
+	}
+	
 	/**
 	 * @author psyGamer
 	 * @version 1.0
 	 * @since 1.0
 	 */
 	public AdvancedBoundingBox center(final boolean x, final boolean y, final boolean z) {
-		final double centerX = Math.abs(this.maxX - this.minX);
-		final double centerY = Math.abs(this.maxY - this.minY);
-		final double centerZ = Math.abs(this.maxZ - this.minZ);
+		final double centerX = Math.abs(this.maxX - this.minX) / 2;
+		final double centerY = Math.abs(this.maxY - this.minY) / 2;
+		final double centerZ = Math.abs(this.maxZ - this.minZ) / 2;
 		
 		return this.offset(
 				x ? 8 - centerX : 0,

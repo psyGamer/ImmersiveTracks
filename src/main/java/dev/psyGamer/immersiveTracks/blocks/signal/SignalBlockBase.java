@@ -3,6 +3,7 @@ package dev.psyGamer.immersiveTracks.blocks.signal;
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.ModelBlockBase;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
+import dev.psyGamer.immersiveTracks.util.model.AdvancedBoundingBox;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -16,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.vecmath.Vector3d;
+import java.util.Objects;
 
 @SuppressWarnings("deprecation")
 public class SignalBlockBase extends ModelBlockBase {
@@ -28,25 +29,21 @@ public class SignalBlockBase extends ModelBlockBase {
 			return 0xFFFFFF;
 		}
 		
-		//noinspection ConstantConditions
-		return ((SignalTileEntity) world.getTileEntity(pos)).getBulbColor(bulbIndex);
+		return ((SignalTileEntity) Objects.requireNonNull(world.getTileEntity(pos))).getBulbColor(bulbIndex);
 	}
 	
 	public SignalBlockBase(final String name) {
-		super(name, Material.IRON, ImmersiveTracks.SIGNALS_TAB,
-				new Vector3d(2, 0, 7),
-				new Vector3d(14, 16, 9)
-		);
+		super(name, Material.IRON, ImmersiveTracks.SIGNALS_TAB, new AdvancedBoundingBox(12, 16, 2).center());
 	}
 	
 	@Override
 	public int getMetaFromState(final IBlockState state) {
-		return state.getValue(SignalBlockBase.FACING).getHorizontalIndex();
+		return (state.getValue(SignalBlockBase.FACING).getHorizontalIndex() + 2) % 2;
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(final int meta) {
-		return this.getDefaultState().withProperty(SignalBlockBase.FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(SignalBlockBase.FACING, EnumFacing.getHorizontal((meta + 2) % 2));
 	}
 	
 	@Override
@@ -76,8 +73,6 @@ public class SignalBlockBase extends ModelBlockBase {
 	
 	@Override
 	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
-		final AxisAlignedBB boundingBox = super.getBoundingBox(state, source, pos);
-		
-		return this.rotateBoundingBox(boundingBox, state.getValue(SignalBlockBase.FACING));
+		return this.getRotatedBoundingBox(state.getValue(SignalBlockBase.FACING));
 	}
 }

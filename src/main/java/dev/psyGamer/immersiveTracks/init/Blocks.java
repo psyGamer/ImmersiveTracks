@@ -4,10 +4,10 @@ import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.ModelBlockBase;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalControllerBlock;
+import dev.psyGamer.immersiveTracks.util.model.AdvancedBoundingBox;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
-import javax.vecmath.Vector3d;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +25,7 @@ public class Blocks {
 	
 	public static final Block SIGNAL = new SignalBlockBase("signal");
 	public static final Block SIGNAL_POLE = new ModelBlockBase("signal_pole", Material.IRON, ImmersiveTracks.SIGNALS_TAB,
-			new Vector3d(7, 0, 7),
-			new Vector3d(9, 16, 9)
+			new AdvancedBoundingBox(2, 16, 2).center()
 	);
 	public static final Block SIGNAL_CONTROLLER = new SignalControllerBlock();
 }
