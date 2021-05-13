@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -34,7 +35,7 @@ public class SignalBlockBase extends ModelBlockBase {
 	public SignalBlockBase(final String name) {
 		super(name, Material.IRON, ImmersiveTracks.SIGNALS_TAB,
 				new Vector3d(2, 0, 7),
-				new Vector3d(13, 9, 16)
+				new Vector3d(14, 16, 9)
 		);
 	}
 	
@@ -71,5 +72,12 @@ public class SignalBlockBase extends ModelBlockBase {
 	@Override
 	public boolean hasTileEntity(final IBlockState state) {
 		return true;
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
+		final AxisAlignedBB boundingBox = super.getBoundingBox(state, source, pos);
+		
+		return this.rotateBoundingBox(boundingBox, state.getValue(SignalBlockBase.FACING));
 	}
 }
