@@ -33,9 +33,9 @@ public class MathUtil {
 	
 	public static Vector3d convertPolarToCartesian(final PolarPosition pos) {
 		return new Vector3d(
-				pos.radius * Math.sin(pos.xRotation) * Math.cos(pos.yRotation),
-				pos.radius * Math.sin(pos.xRotation) * Math.sin(pos.yRotation),
-				pos.radius * Math.cos(pos.xRotation)
+				pos.radius * Math.sin(Math.toRadians(pos.xRotation)) * Math.cos(Math.toRadians(pos.yRotation)),
+				pos.radius * Math.sin(Math.toRadians(pos.xRotation)) * Math.sin(Math.toRadians(pos.yRotation)),
+				pos.radius * Math.cos(Math.toRadians(pos.xRotation))
 		);
 	}
 }
