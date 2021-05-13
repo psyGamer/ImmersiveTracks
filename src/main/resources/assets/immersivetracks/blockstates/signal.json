@@ -1,8 +1,19 @@
 {
-    "variants": {
-        "facing=north": { "model": "immersivetracks:signal" },
-        "facing=south": { "model": "immersivetracks:signal", "y": 90 },
-        "facing=east":  { "model": "immersivetracks:signal", "y": 180 },
-        "facing=west":  { "model": "immersivetracks:signal", "y": 270 }
-    }
+	"variants": {
+		"facing=north": {
+			"model": "immersivetracks:signal"
+		},
+		"facing=east": {
+			"model": "immersivetracks:signal",
+			"y": 90
+		},
+		"facing=south": {
+			"model": "immersivetracks:signal",
+			"y": 180
+		},
+		"facing=west": {
+			"model": "immersivetracks:signal",
+			"y": 270
+		}
+	}
 }
