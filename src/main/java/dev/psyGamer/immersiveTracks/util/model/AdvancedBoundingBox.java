@@ -12,19 +12,15 @@ import javax.vecmath.Vector3d;
  */
 public class AdvancedBoundingBox {
 	
-	private double minX;
-	private double minY;
-	private double minZ;
-	private double maxX;
-	private double maxY;
-	private double maxZ;
+	private final double minX;
+	private final double minY;
+	private final double minZ;
+	private final double maxX;
+	private final double maxY;
+	private final double maxZ;
 	
-	private EnumFacing defaultDirection = EnumFacing.NORTH;
 	private EnumFacing upwardRotationBase = EnumFacing.NORTH;
-	
 	private EnumFacing downwardRotationBase = EnumFacing.NORTH;
-	
-	private final boolean immuatable;
 	
 	/**
 	 * @author psyGamer
@@ -33,26 +29,12 @@ public class AdvancedBoundingBox {
 	 */
 	public AdvancedBoundingBox(final double minX, final double minY, final double minZ,
 							   final double maxX, final double maxY, final double maxZ) {
-		this(minX, minY, minZ, maxX, maxY, maxZ, false);
-	}
-	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
-	public AdvancedBoundingBox(final double minX, final double minY, final double minZ,
-							   final double maxX, final double maxY, final double maxZ,
-							   final boolean immutable) {
-		
 		this.minX = minX;
 		this.minY = minY;
 		this.minZ = minZ;
 		this.maxX = maxX;
 		this.maxY = maxY;
 		this.maxZ = maxZ;
-		
-		this.immuatable = immutable;
 	}
 	
 	/**
@@ -77,8 +59,6 @@ public class AdvancedBoundingBox {
 		this.maxX = max.x;
 		this.maxY = max.y;
 		this.maxZ = max.z;
-		
-		this.immuatable = immutable;
 	}
 	
 	/**
@@ -87,7 +67,6 @@ public class AdvancedBoundingBox {
 	 * @since 1.0
 	 */
 	public AdvancedBoundingBox flip(final EnumFacing.Axis axis) {
-		System.out.println("flip axis: " + axis);
 		return this.flip(axis == EnumFacing.Axis.X, axis == EnumFacing.Axis.Y, axis == EnumFacing.Axis.Z);
 	}
 	
@@ -97,7 +76,6 @@ public class AdvancedBoundingBox {
 	 * @since 1.0
 	 */
 	public AdvancedBoundingBox rotate(final EnumFacing facing) {
-		System.out.println("rot: " + facing);
 		switch (facing) {
 			default:
 			case NORTH:
@@ -105,62 +83,62 @@ public class AdvancedBoundingBox {
 			case SOUTH:
 				return this.flip(true, false, true);
 			case EAST:
-				return this.rotateY(1);
+				return this.rotatePositiveY();
 			case WEST:
-				return this.rotateY(1).flip(true, false, true);
+				return this.rotatePositiveY().flip(true, false, true);
 			case UP:
 				switch (this.upwardRotationBase) {
 					default:
 					case NORTH:
-						return this.rotateX(1);
+						return this.rotatePositiveX();
 					case SOUTH:
-						return this.rotateX(1).flip(true, false, true);
+						return this.rotatePositiveX().flip(true, false, true);
 					case EAST:
-						return this.rotateX(1).rotateY(1);
+						return this.rotatePositiveX().rotatePositiveY();
 					case WEST:
-						return this.rotateX(1).rotateY(1).flip(true, false, true);
+						return this.rotatePositiveX().rotatePositiveY().flip(true, false, true);
 				}
 			case DOWN:
 				switch (this.downwardRotationBase) {
 					default:
 					case NORTH:
-						return this.rotateX(3);
+						return this.rotateNegativeX();
 					case SOUTH:
-						return this.rotateX(3).flip(true, false, true);
+						return this.rotateNegativeX().flip(true, false, true);
 					case EAST:
-						return this.rotateX(3).rotateY(3);
+						return this.rotateNegativeX().rotatePositiveY();
 					case WEST:
-						return this.rotateX(3).rotateY(3).flip(true, false, true);
+						return this.rotateNegativeX().rotatePositiveY().flip(true, false, true);
 				}
 		}
 	}
 	
-	public AdvancedBoundingBox rotateX(final int times) {
-		System.out.println("rotX: " + times);
-		AdvancedBoundingBox boundingBox = this;
-		
-		for (int i = 0 ; i < times ; i++) {
-			boundingBox = this.setValues(
-					this.minX, -this.minZ + 16, this.minY,
-					this.maxX, -this.maxZ + 16, this.maxY
-			);
-		}
-		
-		return boundingBox;
+	public AdvancedBoundingBox rotatePositiveX() {
+		return new AdvancedBoundingBox(
+				this.minX, -this.minZ + 16, this.minY,
+				this.maxX, -this.maxZ + 16, this.maxY
+		);
 	}
 	
-	public AdvancedBoundingBox rotateY(final int times) {
-		System.out.println("rotY: " + times);
-		AdvancedBoundingBox boundingBox = this;
-		
-		for (int i = 0 ; i < times ; i++) {
-			boundingBox = this.setValues(
-					-this.minY + 16, this.minY, this.minX,
-					-this.maxY + 16, this.maxY, this.maxX
-			);
-		}
-		
-		return boundingBox;
+	public AdvancedBoundingBox rotateNegativeX() {
+		return new AdvancedBoundingBox(
+				this.minX, this.minZ, -this.minY + 16,
+				this.maxX, this.maxZ, -this.maxY + 16
+		);
+	}
+	
+	public AdvancedBoundingBox rotatePositiveY() {
+		return new AdvancedBoundingBox(
+				-this.minZ + 16, this.minY, this.minX,
+				-this.maxZ + 16, this.maxY, this.maxX
+		);
+	}
+	
+	public AdvancedBoundingBox rotateNegativeY() {
+		return new AdvancedBoundingBox(
+				this.minZ, this.minY, -this.minX + 16,
+				this.maxZ, this.maxY, -this.maxX + 16
+		);
 	}
 	
 	/**
@@ -169,8 +147,7 @@ public class AdvancedBoundingBox {
 	 * @since 1.0
 	 */
 	public AdvancedBoundingBox flip(final boolean xAxis, final boolean yAxis, final boolean zAxis) {
-		System.out.println("flip bool");
-		return this.setValues(
+		return new AdvancedBoundingBox(
 				xAxis ? -this.minX + 16 : this.minX, yAxis ? -this.minY + 16 : this.minY, zAxis ? -this.minZ + 16 : this.minZ,
 				xAxis ? -this.maxX + 16 : this.maxX, yAxis ? -this.maxY + 16 : this.maxY, zAxis ? -this.maxZ + 16 : this.maxZ
 		);
@@ -199,7 +176,7 @@ public class AdvancedBoundingBox {
 	 * @since 1.0
 	 */
 	public AdvancedBoundingBox offset(final double x, final double y, final double z) {
-		return this.setValues(
+		return new AdvancedBoundingBox(
 				this.minX + x, this.minY + y, this.minZ + z,
 				this.maxX + x, this.maxY + y, this.maxZ + z
 		);
@@ -211,7 +188,7 @@ public class AdvancedBoundingBox {
 	 * @since 1.0
 	 */
 	public AdvancedBoundingBox grow(final double x, final double y, final double z) {
-		return this.setValues(
+		return new AdvancedBoundingBox(
 				this.minX - x, this.minY - y, this.minZ - z,
 				this.maxX + x, this.maxY + y, this.maxZ + z
 		);
@@ -249,104 +226,11 @@ public class AdvancedBoundingBox {
 	 * @version 1.0
 	 * @since 1.0
 	 */
-	public AdvancedBoundingBox copy() {
-		return this.copy(this.immuatable);
-	}
-	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
-	public AdvancedBoundingBox copy(final boolean immutable) {
-		return new AdvancedBoundingBox(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
-	}
-	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
 	public AxisAlignedBB getBoundingBox() {
-		System.out.println("getting: " + this);
 		return new AxisAlignedBB(
 				this.minX / 16, this.minY / 16, this.minZ / 16,
 				this.maxX / 16, this.maxY / 16, this.maxZ / 16
 		);
-	}
-	
-	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
-	public AdvancedBoundingBox setValues(final double minX, final double minY, final double minZ,
-										 final double maxX, final double maxY, final double maxZ) {
-		if (this.immuatable) {
-			System.out.println("Immutable update");
-			System.out.println("Before: " + this);
-			final AdvancedBoundingBox boundingBox = new AdvancedBoundingBox(
-					minX, minY, minZ,
-					maxX, maxY, maxZ,
-					true
-			);
-			System.out.println("After: " + boundingBox);
-			return boundingBox;
-		}
-		System.out.println("Before: " + this);
-		
-		this.minX = minX;
-		this.minY = minY;
-		this.minZ = minZ;
-		this.maxX = maxX;
-		this.maxY = maxY;
-		this.maxZ = maxZ;
-		
-		System.out.println("After: " + this);
-		
-		return this;
-	}
-	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
-	public AdvancedBoundingBox setValues(final AdvancedBoundingBox values) {
-		if (this.immuatable) {
-			System.out.println("Immutable update");
-			System.out.println("Before: " + this);
-			System.out.println("After: " + values);
-			
-			return values;
-		}
-		
-		System.out.println("Before: " + this);
-		
-		this.minX = values.minX;
-		this.minY = values.minY;
-		this.minZ = values.minZ;
-		this.maxX = values.maxX;
-		this.maxY = values.maxY;
-		this.maxZ = values.maxZ;
-		
-		System.out.println("After: " + this);
-		
-		return this;
-	}
-	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
-	public void setDefaultDirection(final EnumFacing defaultDirection) {
-		if (defaultDirection == EnumFacing.DOWN || defaultDirection == EnumFacing.UP) {
-			throw new IllegalArgumentException("Default direction must be on the horizontal plane (NORTH, EAST, SOUTH, WEST)");
-		} // TODO Add support for also UP and DOWN
-		
-		this.defaultDirection = defaultDirection;
 	}
 	
 	/**
@@ -375,17 +259,8 @@ public class AdvancedBoundingBox {
 		this.downwardRotationBase = downwardRotationBase;
 	}
 	
-	/**
-	 * @author psyGamer
-	 * @version 1.0
-	 * @since 1.0
-	 */
-	public boolean isImmuatable() {
-		return this.immuatable;
-	}
-	
 	@Override
 	public String toString() {
-		return String.format("AdvancedBoundingBox[%s, %s, %s -> %s, %s, %s | Immutable: %b]", this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ, this.immuatable);
+		return String.format("AdvancedBoundingBox[%s, %s, %s -> %s, %s, %s]", this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
 	}
 }
