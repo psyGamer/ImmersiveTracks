@@ -8,6 +8,8 @@ Keep in mind that this is and always will be a hobby project so I won't be able 
 Those are the things that I'd like to add. <br />
 Sadly I can't guarantie that any of those will actually get added, tho I'm definetly trying it.
 
+If you want to see the current development, you can check out the [Trello Board](https://trello.com/b/yhs2ZZ6V/immersive-tracks "Immersive Tracks - Trello Board")
+
 * [ ] Signals
 * [ ] Signs
 * [ ] Crossings
