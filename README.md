@@ -27,5 +27,4 @@ If you find a **Bug**, have an idea to **Enchance** something or have a **Featur
 
 # License
 
-The [**License**](https://github.com/psyGamer/cQualizer/blob/master/LICENSE "MIT License") supply in the project applies and therefore you free to use it how you like. <br />
-And yes, that means you can use it in modpacks.
+The [**License**](https://github.com/psyGamer/ImmersiveTracks/blob/master/LICENSE "MIT License") supply in the project applies and therefore you free to use it in modpacks.
