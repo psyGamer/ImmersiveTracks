@@ -12,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class LinkerItem extends ItemBase {
@@ -24,7 +25,7 @@ public class LinkerItem extends ItemBase {
 	
 	@Override
 	public EnumActionResult onItemUse(final EntityPlayer player, final World world, final BlockPos pos, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
-		if (world.isRemote && player.getHeldItem(hand).getItem() == this) {
+		if (world.isRemote) {
 			final Block block = world.getBlockState(pos).getBlock();
 			
 			NBTTagCompound tag = player.getHeldItem(hand).getTagCompound();
@@ -33,14 +34,18 @@ public class LinkerItem extends ItemBase {
 				tag = new NBTTagCompound();
 			}
 			
+			System.out.println(block);
+			System.out.println(block instanceof ILinkableSource);
+			System.out.println(block instanceof ILinkableTarget);
+			
 			if (block instanceof ILinkableSource) {
 				NBTUtil.setBlockPosition(tag, "source", pos);
 				tag.setInteger("sourceWorldID", world.provider.getDimension());
-				LinkerItem.sendMessageInActionBar(player, "§7Linking " + block.getLocalizedName() + "...");
+				LinkerItem.sendMessageInActionBar(player, TextFormatting.GRAY + "Linking " + block.getLocalizedName() + "...");
 			}
 			if (block instanceof ILinkableTarget && tag.hasKey("source")) {
 				if (tag.getInteger("sourceWorldID") != world.provider.getDimension()) {
-					LinkerItem.sendMessageInActionBar(player, "§cYou can't link over dimensions");
+					LinkerItem.sendMessageInActionBar(player, TextFormatting.RED + "You can't link over dimensions");
 					
 					return EnumActionResult.SUCCESS;
 				}
@@ -49,7 +54,7 @@ public class LinkerItem extends ItemBase {
 				final ILinkableTarget target = LinkerItem.getTarget(world, pos);
 				
 				if (source == null || target == null) {
-					LinkerItem.sendMessageInActionBar(player, "§cAn error occurred, please try again");
+					LinkerItem.sendMessageInActionBar(player, TextFormatting.RED + "An error occurred, please try again");
 					
 					if (player.getHeldItem(hand).getItem() == this) {
 						player.getHeldItem(hand).setTagCompound(null);
@@ -59,24 +64,27 @@ public class LinkerItem extends ItemBase {
 				}
 				
 				if (!(source.isValidTarget(world, pos) || target.isValidSource(world, NBTUtil.getBlockPosition(tag, "source")))) {
-					LinkerItem.sendMessageInActionBar(player, "§cCan't link " + ((Block) source).getLocalizedName() + " with " + ((Block) target).getLocalizedName());
+					LinkerItem.sendMessageInActionBar(player, TextFormatting.RED + "Can't link " + ((Block) source).getLocalizedName() + " with " + ((Block) target).getLocalizedName());
 					
 					return EnumActionResult.SUCCESS;
 				}
 				
-				source.onLinkAsSource(world, pos);
-				target.onLinkAsTarget(world, NBTUtil.getBlockPosition(tag, "source"));
+				source.onLink(world, pos);
 				
-				LinkerItem.sendMessageInActionBar(player, "§aSuccessfully linked " + ((Block) source).getLocalizedName() + " with " + ((Block) target).getLocalizedName());
+				LinkerItem.sendMessageInActionBar(player, TextFormatting.GREEN + "Successfully linked " + ((Block) target).getLocalizedName() + " with " + ((Block) source).getLocalizedName());
 				
 				return EnumActionResult.SUCCESS;
+			} else if (block instanceof ILinkableTarget) {
+				LinkerItem.sendMessageInActionBar(player, TextFormatting.RED + "You must link the source first");
 			}
-			
-			LinkerItem.sendMessageInActionBar(player, "§cYou must link the source first");
 			
 			if (!(block instanceof ILinkableSource || block instanceof ILinkableTarget)) {
+				LinkerItem.sendMessageInActionBar(player, TextFormatting.RED + "You can't link this block");
+				
 				return EnumActionResult.FAIL;
 			}
+			
+			player.getHeldItem(hand).setTagCompound(tag);
 		}
 		
 		return EnumActionResult.SUCCESS;

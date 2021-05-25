@@ -5,7 +5,7 @@ import net.minecraft.world.World;
 
 public interface ILinkableSource {
 	
-	void onLinkAsSource(World world, BlockPos target);
+	void onLink(World world, BlockPos target);
 	
 	boolean isValidTarget(World world, BlockPos pos);
 }

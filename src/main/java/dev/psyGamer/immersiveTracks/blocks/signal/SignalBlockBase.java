@@ -2,7 +2,9 @@ package dev.psyGamer.immersiveTracks.blocks.signal;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.ModelBlockBase;
+import dev.psyGamer.immersiveTracks.init.ModBlocks;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
+import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
 import dev.psyGamer.immersiveTracks.util.model.AdvancedBoundingBox;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -20,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.Objects;
 
 @SuppressWarnings("deprecation")
-public class SignalBlockBase extends ModelBlockBase {
+public class SignalBlockBase extends ModelBlockBase implements ILinkableTarget {
 	
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	
@@ -74,5 +76,10 @@ public class SignalBlockBase extends ModelBlockBase {
 	@Override
 	public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
 		return this.getRotatedBoundingBox(state.getValue(SignalBlockBase.FACING));
+	}
+	
+	@Override
+	public boolean isValidSource(final World world, final BlockPos pos) {
+		return world.getBlockState(pos).getBlock() == ModBlocks.SIGNAL_CONTROLLER;
 	}
 }

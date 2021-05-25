@@ -4,20 +4,25 @@ import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.ModConfig;
 import dev.psyGamer.immersiveTracks.blocks.BlockBase;
 import dev.psyGamer.immersiveTracks.init.ModBlocks;
+import dev.psyGamer.immersiveTracks.tileEntity.SignalControllerTileEntity;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import dev.psyGamer.immersiveTracks.util.RedstoneUtil;
+import dev.psyGamer.immersiveTracks.util.linking.ILinkableSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+
 @SuppressWarnings("deprecation")
-public class SignalControllerBlock extends BlockBase {
+public class SignalControllerBlock extends BlockBase implements ILinkableSource {
 	
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 	
@@ -25,6 +30,17 @@ public class SignalControllerBlock extends BlockBase {
 		super("signal_controller", Material.IRON, ImmersiveTracks.SIGNALS_TAB);
 		
 		this.setDefaultState(this.getDefaultState().withProperty(SignalControllerBlock.ACTIVE, false));
+	}
+	
+	@Override
+	public boolean hasTileEntity(final IBlockState state) {
+		return true;
+	}
+	
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(final World world, final IBlockState state) {
+		return new SignalControllerTileEntity();
 	}
 	
 	@Override
@@ -99,5 +115,15 @@ public class SignalControllerBlock extends BlockBase {
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public void onLink(final World world, final BlockPos target) {
+		final SignalTileEntity signalTileEntity = (SignalTileEntity) world.getTileEntity(target);
+	}
+	
+	@Override
+	public boolean isValidTarget(final World world, final BlockPos pos) {
+		return world.getBlockState(pos).getBlock() == ModBlocks.SIGNAL;
 	}
 }

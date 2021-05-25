@@ -1,5 +1,6 @@
 package dev.psyGamer.immersiveTracks.init;
 
+import dev.psyGamer.immersiveTracks.items.LinkerItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -21,4 +22,6 @@ public class ModItems {
 	public static Item[] getItems() {
 		return ModItems.items.toArray(new Item[0]);
 	}
+	
+	public static final Item LINKER = new LinkerItem("linker");
 }
