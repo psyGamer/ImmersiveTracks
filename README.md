@@ -1,6 +1,5 @@
 # ImmersiveTracks
 
-
 <a href="https://www.curseforge.com/minecraft/mc-mods/immersive-tracks"><img src="http://cf.way2muchnoise.eu/versions/For%20Minecraft_479645_all.svg"/><a/>  
 <a href="https://www.curseforge.com/minecraft/mc-mods/immersive-tracks"><img src="http://cf.way2muchnoise.eu/full_479645_Downloads.svg"/><a/>
   
@@ -10,14 +9,12 @@ Keep in mind that this is and always will be a hobby project so I won't be able 
 # Feature List
 
 Those are the things that I'd like to add. <br />
-Sadly I can't guarantie that any of those will actually get added, tho I'm definetly trying it.
 
-If you want to see the current development, you can check out the [Trello Board](https://trello.com/b/yhs2ZZ6V/immersive-tracks "Immersive Tracks - Trello Board")
-
-* [ ] Signals
-* [ ] Signs
-* [ ] Crossings
-* [ ] OpenComputers / ComputerCraft intigration
+* Block related to rails (e.g. railbed)
+* Signs
+* Signals
+* Grade Crossings
+* OpenComputers / ComputerCraft intigration
 
 # 1.16 Support
 
@@ -27,7 +24,7 @@ Although if you really want it on 1.16 your welcome to port it yourself.
 
 # Bug reports
 
-If you find a **Bug**, have an idea to **Enchance** something or have a **Feature Request** you can simply open an [**Issue**](https://github.com/psyGamer/cQualizer/issues/new/choose "Open an Issue")
+If you find a **Bug** or have a **Feature Request** you can simply open an [**Issue**](https://github.com/psyGamer/cQualizer/issues/new/choose "Open an Issue")
 
 # License
 
