@@ -1,6 +1,7 @@
 package dev.psyGamer.immersiveTracks.items;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
+import dev.psyGamer.immersiveTracks.ModConfig;
 import dev.psyGamer.immersiveTracks.util.NBTUtil;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableSource;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
@@ -46,7 +47,9 @@ public class LinkerItem extends ItemBase {
 					return EnumActionResult.SUCCESS;
 				}
 				
-				final ILinkableSource source = LinkerItem.getSource(world, NBTUtil.getBlockPosition(tag, "source"));
+				final BlockPos sourcePos = NBTUtil.getBlockPosition(tag, "source");
+				
+				final ILinkableSource source = LinkerItem.getSource(world, sourcePos);
 				final ILinkableTarget target = LinkerItem.getTarget(world, pos);
 				
 				if (source == null || target == null) {
@@ -59,8 +62,14 @@ public class LinkerItem extends ItemBase {
 					return EnumActionResult.SUCCESS;
 				}
 				
-				if (!(source.isValidTarget(world, pos) || target.isValidSource(world, NBTUtil.getBlockPosition(tag, "source")))) {
+				if (!(source.isValidTarget(world, pos) || target.isValidSource(world, sourcePos))) {
 					LinkerItem.sendMessageInActionBar(player, TextFormatting.RED + "Can't link " + ((Block) source).getLocalizedName() + " with " + ((Block) target).getLocalizedName());
+					
+					return EnumActionResult.SUCCESS;
+				}
+				
+				if (sourcePos.getDistance(pos.getX(), pos.getY(), pos.getZ()) > ModConfig.maxLinkingDistance) {
+					LinkerItem.sendMessageInActionBar(player, TextFormatting.RED + "Blocks are too far apart (Maximum linking distance: " + ModConfig.maxLinkingDistance + ")");
 					
 					return EnumActionResult.SUCCESS;
 				}
