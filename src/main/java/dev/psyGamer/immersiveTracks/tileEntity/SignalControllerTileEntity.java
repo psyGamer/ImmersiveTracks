@@ -1,15 +1,34 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SignalControllerTileEntity extends TileEntityBase {
 	
-	private final HashMap<BlockPos, SignalTileEntity> connectedSignals = new HashMap<>();
+	private final Map<BlockPos, SignalTileEntity> connectedSignals = new HashMap();
+	
+	public void addSignal(final SignalTileEntity tileEntity) {
+		this.connectedSignals.put(tileEntity.getPos(), tileEntity);
+		this.markDirty();
+		System.out.println("marked dirty");
+		System.out.println(this.connectedSignals);
+	}
+	
+	public void updateSignals(final boolean active) {
+		this.connectedSignals.forEach((position, signal) -> {
+			if (signal == null) {
+				signal = (SignalTileEntity) this.world.getTileEntity(position);
+				this.connectedSignals.put(position, signal);
+			}
+			
+			signal.setBulbColor(0, active ? 0x222222 : 0xEE0000);
+			signal.setBulbColor(1, active ? 0x00EE00 : 0x222222);
+		});
+	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
@@ -17,11 +36,16 @@ public class SignalControllerTileEntity extends TileEntityBase {
 		
 		for (int i = 0 ; i < this.connectedSignals.size() ; i++) {
 			final BlockPos position = new ArrayList<>(this.connectedSignals.keySet()).get(i);
+			System.out.println(position);
 			
-			signalPositions[i] = position.getX();
-			signalPositions[i + 1] = position.getY();
-			signalPositions[i + 2] = position.getZ();
+			signalPositions[i * 3] = position.getX();
+			signalPositions[i * 3 + 1] = position.getY();
+			signalPositions[i * 3 + 2] = position.getZ();
 		}
+		
+		System.out.println("Writing");
+		System.out.println(this.connectedSignals);
+		System.out.println(signalPositions);
 		
 		compound.setIntArray("signalPositions", signalPositions);
 		
@@ -32,30 +56,23 @@ public class SignalControllerTileEntity extends TileEntityBase {
 	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		this.connectedSignals.clear();
+		System.out.println("READ");
+		System.out.println(this.connectedSignals);
 		
 		final int[] signalPositions = compound.getIntArray("signalPositions");
 		
 		for (int i = 0 ; i < signalPositions.length ; i += 3) {
-			final BlockPos pos = new BlockPos(
+			final BlockPos position = new BlockPos(
 					signalPositions[i],
 					signalPositions[i + 1],
 					signalPositions[i + 2]
 			);
 			
-			if (this.getSignal(pos) != null) {
-				this.connectedSignals.put(pos, this.getSignal(pos));
-			}
+			System.out.println("Read");
+			System.out.println(position);
+			
+			this.connectedSignals.put(position, this.world == null ? null : (SignalTileEntity) this.world.getTileEntity(position));
+			System.out.println(this.connectedSignals);
 		}
-	}
-	
-	private SignalTileEntity getSignal(final BlockPos pos) {
-		final TileEntity tileEntity = this.world.getTileEntity(pos);
-		
-		if (tileEntity instanceof SignalTileEntity) {
-			return (SignalTileEntity) tileEntity;
-		}
-		
-		return null;
 	}
 }

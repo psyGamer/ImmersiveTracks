@@ -25,7 +25,7 @@ public class LinkerItem extends ItemBase {
 	
 	@Override
 	public EnumActionResult onItemUse(final EntityPlayer player, final World world, final BlockPos pos, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
-		if (world.isRemote) {
+		if (!world.isRemote) {
 			final Block block = world.getBlockState(pos).getBlock();
 			
 			NBTTagCompound tag = player.getHeldItem(hand).getTagCompound();
@@ -69,7 +69,7 @@ public class LinkerItem extends ItemBase {
 					return EnumActionResult.SUCCESS;
 				}
 				
-				source.onLink(world, pos);
+				source.onLink(world, NBTUtil.getBlockPosition(tag, "source"), pos);
 				
 				LinkerItem.sendMessageInActionBar(player, TextFormatting.GREEN + "Successfully linked " + ((Block) target).getLocalizedName() + " with " + ((Block) source).getLocalizedName());
 				
