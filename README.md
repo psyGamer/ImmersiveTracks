@@ -1,5 +1,9 @@
 # ImmersiveTracks
 
+
+<a href="https://www.curseforge.com/minecraft/mc-mods/immersive-tracks"><img src="http://cf.way2muchnoise.eu/versions/For%20Minecraft_479645_all.svg"/><a/>  
+<a href="https://www.curseforge.com/minecraft/mc-mods/immersive-tracks"><img src="http://cf.way2muchnoise.eu/full_479645_Downloads.svg"/><a/>
+  
 This is mod was created for the use with [Immersive Railroading](https://github.com/TeamOpenIndustry/ImmersiveRailroading "Immersive Railroading") and that's also the reason it's for Minecraft 1.12.2 <br >
 Keep in mind that this is and always will be a hobby project so I won't be able to completly focus on this mod.
 
