@@ -1,19 +1,24 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"model": "immersivetracks:signal"
+	},
 	"variants": {
-		"facing=north": {
-			"model": "immersivetracks:signal"
+		"facing": {
+			"north": {},
+			"east": {
+				"y": 90
+			},
+			"south": {
+				"y": 180
+			},
+			"west": {
+				"y": 270
+			}
 		},
-		"facing=east": {
-			"model": "immersivetracks:signal",
-			"y": 90
-		},
-		"facing=south": {
-			"model": "immersivetracks:signal",
-			"y": 180
-		},
-		"facing=west": {
-			"model": "immersivetracks:signal",
-			"y": 270
+		"update": {
+			"true": {},
+			"false": {}
 		}
 	}
 }

@@ -65,11 +65,16 @@ public class SignalControllerBlock extends BlockBase implements ILinkableSource 
 	
 	@Override
 	public void neighborChanged(final IBlockState state, final World worldIn, final BlockPos pos, final Block blockIn, final BlockPos fromPos) {
-		worldIn.setBlockState(pos, state.withProperty(SignalControllerBlock.ACTIVE, RedstoneUtil.isBlockPowered(worldIn, pos)));
+		final IBlockState oldState = state;
+		final IBlockState newState = state.withProperty(SignalControllerBlock.ACTIVE, RedstoneUtil.isBlockPowered(worldIn, pos));
 		
-		if (!worldIn.isRemote) {
-			((SignalControllerTileEntity) Objects.requireNonNull(worldIn.getTileEntity(pos)))
-					.updateSignals(worldIn.getBlockState(pos).getValue(SignalControllerBlock.ACTIVE));
+		if (!oldState.equals(newState)) {
+			worldIn.setBlockState(pos, newState);
+			
+			if (!worldIn.isRemote) {
+				((SignalControllerTileEntity) Objects.requireNonNull(worldIn.getTileEntity(pos)))
+						.updateSignals(worldIn.getBlockState(pos).getValue(SignalControllerBlock.ACTIVE));
+			}
 		}
 	}
 	

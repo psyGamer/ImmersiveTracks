@@ -7,6 +7,7 @@ import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
 import dev.psyGamer.immersiveTracks.util.model.AdvancedBoundingBox;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -25,6 +26,7 @@ import java.util.Objects;
 public class SignalBlockBase extends ModelBlockBase implements ILinkableTarget {
 	
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final PropertyBool UPDATE = PropertyBool.create("update"); // TODO don't
 	
 	public static int getBulbColor(final IBlockAccess world, final BlockPos pos, final int bulbIndex) {
 		if (bulbIndex < 0) {
@@ -40,17 +42,19 @@ public class SignalBlockBase extends ModelBlockBase implements ILinkableTarget {
 	
 	@Override
 	public int getMetaFromState(final IBlockState state) {
-		return (state.getValue(SignalBlockBase.FACING).getHorizontalIndex() + 2) % 2;
+		return ((state.getValue(SignalBlockBase.FACING).getHorizontalIndex() + 2) % 4 + 1) + (state.getValue(SignalBlockBase.UPDATE) ? 0 : 4);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(final int meta) {
-		return this.getDefaultState().withProperty(SignalBlockBase.FACING, EnumFacing.getHorizontal((meta + 2) % 2));
+		return this.getDefaultState()
+				.withProperty(SignalBlockBase.FACING, EnumFacing.getHorizontal((meta - 3) % 4))
+				.withProperty(SignalBlockBase.UPDATE, meta > 3);
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, SignalBlockBase.FACING);
+		return new BlockStateContainer(this, SignalBlockBase.FACING, SignalBlockBase.UPDATE);
 	}
 	
 	@Override

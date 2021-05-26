@@ -17,14 +17,23 @@ public class SignalControllerTileEntity extends TileEntityBase {
 	}
 	
 	public void updateSignals(final boolean active) {
+		System.out.println("update");
+		System.out.println(this.connectedSignals);
 		this.connectedSignals.forEach((position, signal) -> {
 			if (signal == null) {
 				signal = (SignalTileEntity) this.world.getTileEntity(position);
+				
 				this.connectedSignals.put(position, signal);
+				
+				if (signal == null) {
+					return;
+				}
 			}
 			
 			signal.setBulbColor(0, active ? 0x222222 : 0xEE0000);
 			signal.setBulbColor(1, active ? 0x00EE00 : 0x222222);
+			
+			signal.markForUpdate();
 		});
 	}
 	
