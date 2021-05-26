@@ -21,6 +21,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.Objects;
+import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class SignalBlockBase extends ModelBlockBase implements ILinkableTarget {
@@ -38,18 +39,28 @@ public class SignalBlockBase extends ModelBlockBase implements ILinkableTarget {
 	
 	public SignalBlockBase(final String name) {
 		super(name, Material.IRON, ImmersiveTracks.SIGNALS_TAB, new AdvancedBoundingBox(12, 16, 2).center());
+		
+		this.setDefaultState(this.getDefaultState()
+				.withProperty(SignalBlockBase.FACING, EnumFacing.NORTH)
+				.withProperty(SignalBlockBase.UPDATE, false)
+		);
 	}
 	
 	@Override
 	public int getMetaFromState(final IBlockState state) {
-		return ((state.getValue(SignalBlockBase.FACING).getHorizontalIndex() + 2) % 4 + 1) + (state.getValue(SignalBlockBase.UPDATE) ? 0 : 4);
+		return (state.getValue(SignalBlockBase.FACING).getHorizontalIndex() + 2) % 4;
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(final int meta) {
 		return this.getDefaultState()
-				.withProperty(SignalBlockBase.FACING, EnumFacing.getHorizontal((meta - 3) % 4))
-				.withProperty(SignalBlockBase.UPDATE, meta > 3);
+				.withProperty(SignalBlockBase.FACING, EnumFacing.getHorizontal((meta - 2) % 4));
+	}
+	
+	@Override
+	public void updateTick(final World worldIn, final BlockPos pos, final IBlockState state, final Random rand) {
+		System.out.println("UPDATE TICK");
+		worldIn.setBlockState(pos, state.withProperty(SignalBlockBase.UPDATE, false));
 	}
 	
 	@Override
@@ -62,8 +73,18 @@ public class SignalBlockBase extends ModelBlockBase implements ILinkableTarget {
 		if (!worldIn.isRemote) {
 			final EnumFacing direction = placer.getHorizontalFacing().getOpposite();
 			final IBlockState blockState = this.getDefaultState().withProperty(SignalBlockBase.FACING, direction);
+			final TileEntity tileEntity = worldIn.getTileEntity(pos);
 			
 			worldIn.setBlockState(pos, blockState);
+			
+			if (tileEntity instanceof SignalTileEntity) {
+				final SignalTileEntity signal = (SignalTileEntity) tileEntity;
+				
+				signal.setBulbColor(0, 0xEE0000);
+				signal.setBulbColor(1, 0x222222);
+				
+				signal.markForUpdate();
+			}
 		}
 	}
 	

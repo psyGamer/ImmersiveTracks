@@ -1,9 +1,9 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
+import dev.psyGamer.immersiveTracks.init.ModBlocks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,14 +59,9 @@ public class SignalTileEntity extends TileEntityBase {
 		System.out.println(oldState);
 		System.out.println(newState);
 		
-		this.world.setBlockState(this.pos, newState,
-				Constants.BlockFlags.DEFAULT
-		);
-//		this.world.notifyBlockUpdate(this.pos, oldState, newState,
-//				Constants.BlockFlags.SEND_TO_CLIENTS | Constants.BlockFlags.RERENDER_MAIN_THREAD
-//		);
-//
 		this.markDirty();
+		this.world.setBlockState(this.pos, newState);
+		this.world.scheduleUpdate(this.pos, ModBlocks.SIGNAL, 10);
 	}
 	
 	@Override
