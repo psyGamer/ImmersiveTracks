@@ -34,10 +34,6 @@ public class LinkerItem extends ItemBase {
 				tag = new NBTTagCompound();
 			}
 			
-			System.out.println(block);
-			System.out.println(block instanceof ILinkableSource);
-			System.out.println(block instanceof ILinkableTarget);
-			
 			if (block instanceof ILinkableSource) {
 				NBTUtil.setBlockPosition(tag, "source", pos);
 				tag.setInteger("sourceWorldID", world.provider.getDimension());

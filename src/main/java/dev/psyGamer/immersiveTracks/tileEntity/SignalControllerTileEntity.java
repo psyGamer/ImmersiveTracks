@@ -14,8 +14,6 @@ public class SignalControllerTileEntity extends TileEntityBase {
 	public void addSignal(final SignalTileEntity tileEntity) {
 		this.connectedSignals.put(tileEntity.getPos(), tileEntity);
 		this.markDirty();
-		System.out.println("marked dirty");
-		System.out.println(this.connectedSignals);
 	}
 	
 	public void updateSignals(final boolean active) {
@@ -36,16 +34,10 @@ public class SignalControllerTileEntity extends TileEntityBase {
 		
 		for (int i = 0 ; i < this.connectedSignals.size() ; i++) {
 			final BlockPos position = new ArrayList<>(this.connectedSignals.keySet()).get(i);
-			System.out.println(position);
-			
 			signalPositions[i * 3] = position.getX();
 			signalPositions[i * 3 + 1] = position.getY();
 			signalPositions[i * 3 + 2] = position.getZ();
 		}
-		
-		System.out.println("Writing");
-		System.out.println(this.connectedSignals);
-		System.out.println(signalPositions);
 		
 		compound.setIntArray("signalPositions", signalPositions);
 		
@@ -56,9 +48,6 @@ public class SignalControllerTileEntity extends TileEntityBase {
 	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		System.out.println("READ");
-		System.out.println(this.connectedSignals);
-		
 		final int[] signalPositions = compound.getIntArray("signalPositions");
 		
 		for (int i = 0 ; i < signalPositions.length ; i += 3) {
@@ -68,11 +57,7 @@ public class SignalControllerTileEntity extends TileEntityBase {
 					signalPositions[i + 2]
 			);
 			
-			System.out.println("Read");
-			System.out.println(position);
-			
 			this.connectedSignals.put(position, this.world == null ? null : (SignalTileEntity) this.world.getTileEntity(position));
-			System.out.println(this.connectedSignals);
 		}
 	}
 }
