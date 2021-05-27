@@ -1,6 +1,6 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
-import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
+import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlock;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author psyGamer
  * @version 1.0
- * @see dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase SignalBlockBase
+ * @see SignalBlock SignalBlockBase
  * @since 1.0
  */
 public class SignalTileEntity extends TileEntityBase {
@@ -53,11 +53,8 @@ public class SignalTileEntity extends TileEntityBase {
 	
 	public void markForUpdate() {
 		final IBlockState oldState = this.world.getBlockState(this.pos);
-		final IBlockState newState = oldState.withProperty(SignalBlockBase.UPDATE,
-				!oldState.getValue(SignalBlockBase.UPDATE));
-		
-		System.out.println(oldState);
-		System.out.println(newState);
+		final IBlockState newState = oldState.withProperty(SignalBlock.UPDATE,
+				!oldState.getValue(SignalBlock.UPDATE));
 		
 		this.markDirty();
 		this.world.setBlockState(this.pos, newState);

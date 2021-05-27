@@ -2,6 +2,7 @@ package dev.psyGamer.immersiveTracks.items;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.ModConfig;
+import dev.psyGamer.immersiveTracks.registry.CreativeTabRegistry;
 import dev.psyGamer.immersiveTracks.util.NBTUtil;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableSource;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 public class LinkerItem extends ItemBase {
 	
 	public LinkerItem(final String name) {
-		super(name, ImmersiveTracks.SIGNALS_TAB);
+		super(name, CreativeTabRegistry.SIGNALS_TAB);
 		
 		this.setMaxStackSize(1);
 	}
@@ -32,8 +33,8 @@ public class LinkerItem extends ItemBase {
 	
 	@Override
 	public void registerModel() {
-		ImmersiveTracks.getProxy().registerModel(this, 0, "_off");
-		ImmersiveTracks.getProxy().registerModel(this, 1, "_on");
+		ImmersiveTracks.getProxy().registerModel(this, 0, "off");
+		ImmersiveTracks.getProxy().registerModel(this, 1, "on");
 	}
 	
 	@Override

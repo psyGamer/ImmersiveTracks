@@ -17,8 +17,6 @@ public class SignalControllerTileEntity extends TileEntityBase {
 	}
 	
 	public void updateSignals(final boolean active) {
-		System.out.println("update");
-		System.out.println(this.connectedSignals);
 		this.connectedSignals.forEach((position, signal) -> {
 			if (signal == null) {
 				signal = (SignalTileEntity) this.world.getTileEntity(position);

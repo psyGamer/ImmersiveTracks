@@ -18,7 +18,11 @@ public class ClientProxy implements IProxy {
 	
 	@Override
 	public void registerModel(final Item item, final int metadata, final String variant) {
-		ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(item.getRegistryName() + variant, "inventory"));
+		if (variant.equalsIgnoreCase("")) {
+			ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		} else {
+			ModelLoader.setCustomModelResourceLocation(item, metadata, new ModelResourceLocation(item.getRegistryName() + "_" + variant, "inventory"));
+		}
 	}
 	
 	@Override

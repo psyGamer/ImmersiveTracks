@@ -1,8 +1,6 @@
 package dev.psyGamer.immersiveTracks;
 
-import dev.psyGamer.immersiveTracks.creativeTabs.SignalTab;
 import dev.psyGamer.immersiveTracks.proxy.IProxy;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -16,8 +14,6 @@ public class ImmersiveTracks {
 	
 	public static final String MODID = "immersivetracks";
 	public static final String NAME = "Immersive Tracks";
-	
-	public static final CreativeTabs SIGNALS_TAB = new SignalTab();
 	
 	private static Logger logger = LogManager.getLogger(ImmersiveTracks.MODID);
 	
