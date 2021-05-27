@@ -7,6 +7,7 @@ import dev.psyGamer.immersiveTracks.util.linking.ILinkableSource;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -22,6 +23,17 @@ public class LinkerItem extends ItemBase {
 		super(name, ImmersiveTracks.SIGNALS_TAB);
 		
 		this.setMaxStackSize(1);
+	}
+	
+	@Override
+	public int getMetadata(final ItemStack stack) {
+		return stack.hasTagCompound() && stack.getTagCompound().hasKey("source") ? 1 : 0;
+	}
+	
+	@Override
+	public void registerModel() {
+		ImmersiveTracks.getProxy().registerModel(this, 0, "_off");
+		ImmersiveTracks.getProxy().registerModel(this, 1, "_on");
 	}
 	
 	@Override
