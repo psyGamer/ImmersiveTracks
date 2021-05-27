@@ -1,7 +1,7 @@
 package dev.psyGamer.immersiveTracks.proxy;
 
-import dev.psyGamer.immersiveTracks.init.Registry;
-import dev.psyGamer.immersiveTracks.init.TileEntities;
+import dev.psyGamer.immersiveTracks.init.BlockRegistry;
+import dev.psyGamer.immersiveTracks.init.TileEntiyRegistry;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
@@ -25,14 +25,14 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(final FMLPreInitializationEvent event) {
 		super.preInit(event);
 		
-		TileEntities.registerTESRs();
+		TileEntiyRegistry.registerTESRs();
 	}
 	
 	@Override
 	public void init(final FMLInitializationEvent event) {
 		super.init(event);
 		
-		Registry.registerBlockColors();
+		BlockRegistry.registerBlockColors();
 	}
 	
 	@Override

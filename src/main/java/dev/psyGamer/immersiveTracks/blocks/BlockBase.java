@@ -1,8 +1,8 @@
 package dev.psyGamer.immersiveTracks.blocks;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
-import dev.psyGamer.immersiveTracks.init.ModBlocks;
-import dev.psyGamer.immersiveTracks.init.ModItems;
+import dev.psyGamer.immersiveTracks.init.BlockRegistry;
+import dev.psyGamer.immersiveTracks.init.ItemRegistry;
 import dev.psyGamer.immersiveTracks.util.model.IModelRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -28,8 +28,8 @@ public class BlockBase extends Block implements IModelRegistry {
 		
 		this.setCreativeTab(tab);
 		
-		ModBlocks.addBlock(this);
-		ModItems.addBlock(this);
+		BlockRegistry.registerBlock(this);
+		ItemRegistry.registerItemBlock(this);
 	}
 	
 	@Override

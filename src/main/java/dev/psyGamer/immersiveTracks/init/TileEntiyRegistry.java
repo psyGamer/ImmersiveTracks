@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileEntities {
+public class TileEntiyRegistry {
 	public static void registerTileEntities() {
 		final Map<Class, String> tileEntities = new HashMap() {{
 			this.put(SignalTileEntity.class, "signal");

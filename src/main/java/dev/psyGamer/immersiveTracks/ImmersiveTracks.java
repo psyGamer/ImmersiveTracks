@@ -17,9 +17,9 @@ public class ImmersiveTracks {
 	public static final String MODID = "immersivetracks";
 	public static final String NAME = "Immersive Tracks";
 	
-	public static Logger logger = LogManager.getLogger(ImmersiveTracks.MODID);
-	
 	public static final CreativeTabs SIGNALS_TAB = new SignalTab();
+	
+	private static Logger logger = LogManager.getLogger(ImmersiveTracks.MODID);
 	
 	@Mod.Instance
 	private static ImmersiveTracks instance;
@@ -52,5 +52,9 @@ public class ImmersiveTracks {
 	
 	public static CommonProxy getProxy() {
 		return ImmersiveTracks.proxy;
+	}
+	
+	public static Logger getLogger() {
+		return ImmersiveTracks.logger;
 	}
 }

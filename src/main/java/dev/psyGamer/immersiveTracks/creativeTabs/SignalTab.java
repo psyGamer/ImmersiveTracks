@@ -1,6 +1,6 @@
 package dev.psyGamer.immersiveTracks.creativeTabs;
 
-import dev.psyGamer.immersiveTracks.init.ModBlocks;
+import dev.psyGamer.immersiveTracks.init.BlockRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
@@ -12,6 +12,6 @@ public class SignalTab extends CreativeTabs {
 	
 	@Override
 	public ItemStack getTabIconItem() {
-		return new ItemStack(ModBlocks.SIGNAL);
+		return new ItemStack(BlockRegistry.SIGNAL);
 	}
 }

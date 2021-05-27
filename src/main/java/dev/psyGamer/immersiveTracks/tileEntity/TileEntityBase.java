@@ -1,5 +1,6 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
+import dev.psyGamer.immersiveTracks.init.TileEntiyRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,7 +12,7 @@ import net.minecraft.world.World;
 /**
  * A base class for all TileEntities. <br>
  * It implements all needed methods. <br>
- * Note: You still need to register it in {@link dev.psyGamer.immersiveTracks.init.TileEntities TileEntities} <br> <br>
+ * Note: You still need to register it in {@link TileEntiyRegistry TileEntities} <br> <br>
  *
  * @author psyGamer
  * @version 1.0

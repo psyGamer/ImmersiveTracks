@@ -2,7 +2,7 @@ package dev.psyGamer.immersiveTracks.blocks.signal;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.BlockBase;
-import dev.psyGamer.immersiveTracks.init.ModBlocks;
+import dev.psyGamer.immersiveTracks.init.BlockRegistry;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalControllerTileEntity;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import dev.psyGamer.immersiveTracks.util.RedstoneUtil;
@@ -88,6 +88,6 @@ public class SignalControllerBlock extends BlockBase implements ILinkableSource 
 	
 	@Override
 	public boolean isValidTarget(final World world, final BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == ModBlocks.SIGNAL;
+		return world.getBlockState(pos).getBlock() == BlockRegistry.SIGNAL;
 	}
 }
