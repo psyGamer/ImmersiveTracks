@@ -1,14 +1,13 @@
 package dev.psyGamer.immersiveTracks.blocks;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
-import dev.psyGamer.immersiveTracks.util.IModelRegistry;
-import dev.psyGamer.immersiveTracks.init.Items;
-import dev.psyGamer.immersiveTracks.init.Blocks;
-
-import net.minecraft.item.Item;
+import dev.psyGamer.immersiveTracks.init.ModBlocks;
+import dev.psyGamer.immersiveTracks.init.ModItems;
+import dev.psyGamer.immersiveTracks.util.model.IModelRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 
 /**
  * A base class for all Blocks. <br>
@@ -16,21 +15,21 @@ import net.minecraft.creativetab.CreativeTabs;
  *
  * @author psyGamer
  * @version 1.0
- * @since 1.0
  * @see Block
+ * @since 1.0
  */
 public class BlockBase extends Block implements IModelRegistry {
 	
-	public BlockBase(String name, Material material, CreativeTabs tab) {
+	public BlockBase(final String name, final Material material, final CreativeTabs tab) {
 		super(material);
 		
-		setRegistryName(name);
-		setUnlocalizedName(ImmersiveTracks.MODID + "." + name);
+		this.setRegistryName(name);
+		this.setUnlocalizedName(ImmersiveTracks.MODID + "." + name);
 		
-		setCreativeTab(tab);
+		this.setCreativeTab(tab);
 		
-		Blocks.addBlock(this);
-		Items .addBlock(this);
+		ModBlocks.addBlock(this);
+		ModItems.addBlock(this);
 	}
 	
 	@Override

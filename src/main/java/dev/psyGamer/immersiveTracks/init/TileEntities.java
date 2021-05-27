@@ -1,25 +1,25 @@
 package dev.psyGamer.immersiveTracks.init;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
-import dev.psyGamer.immersiveTracks.tileEntity.*;
-
-import net.minecraft.util.ResourceLocation;
+import dev.psyGamer.immersiveTracks.tileEntity.SignalControllerTileEntity;
+import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TileEntities {
 	public static void registerTileEntities() {
 		final Map<Class, String> tileEntities = new HashMap() {{
-			put(SignalTileEntity.class, "signal");
+			this.put(SignalTileEntity.class, "signal");
+			this.put(SignalControllerTileEntity.class, "signal_controller");
 		}};
 		
-		for (Class tileEntityClass : tileEntities.keySet()) {
-			String tileEntityName  = tileEntities.get(tileEntityClass);
+		for (final Class tileEntityClass : tileEntities.keySet()) {
+			final String tileEntityName = tileEntities.get(tileEntityClass);
 			
 			GameRegistry.registerTileEntity(tileEntityClass, new ResourceLocation(ImmersiveTracks.MODID, tileEntityName));
 		}
@@ -30,8 +30,8 @@ public class TileEntities {
 			// No TESRs yet //
 		}};
 		
-		for (Class tileEntityClass : tileEntitySpecialRenderers.keySet()) {
-			TileEntitySpecialRenderer renderer  = tileEntitySpecialRenderers.get(tileEntityClass);
+		for (final Class tileEntityClass : tileEntitySpecialRenderers.keySet()) {
+			final TileEntitySpecialRenderer renderer = tileEntitySpecialRenderers.get(tileEntityClass);
 			
 			ClientRegistry.bindTileEntitySpecialRenderer(tileEntityClass, renderer);
 		}

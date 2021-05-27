@@ -11,16 +11,16 @@ import net.minecraft.block.material.Material;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Blocks {
+public class ModBlocks {
 	
 	private static final List<Block> blocks = new ArrayList<>();
 	
 	public static void addBlock(final Block block) {
-		Blocks.blocks.add(block);
+		ModBlocks.blocks.add(block);
 	}
 	
 	public static Block[] getBlocks() {
-		return Blocks.blocks.toArray(new Block[0]);
+		return ModBlocks.blocks.toArray(new Block[0]);
 	}
 	
 	public static final Block SIGNAL = new SignalBlockBase("signal");

@@ -3,5 +3,8 @@ tile.immersivetracks.signal.name=Signal
 tile.immersivetracks.signal_pole.name=Signal Pole
 tile.immersivetracks.signal_controller.name=Signal Controller
 
+# Items
+item.immersivetracks.linker.name=Linker
+
 # Creative Tabs
 itemGroup.immersivetracks.signals=Immersive Signals
