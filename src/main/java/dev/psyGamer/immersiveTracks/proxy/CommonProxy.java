@@ -1,6 +1,5 @@
 package dev.psyGamer.immersiveTracks.proxy;
 
-import dev.psyGamer.immersiveTracks.registry.TileEntiyRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -19,7 +18,6 @@ public class CommonProxy implements IProxy {
 	
 	@Override
 	public void preInit(final FMLPreInitializationEvent event) {
-		TileEntiyRegistry.registerTileEntities();
 	}
 	
 	@Override

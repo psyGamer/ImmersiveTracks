@@ -4,6 +4,7 @@ import dev.psyGamer.immersiveTracks.blocks.ModelBlockBase;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import dev.psyGamer.immersiveTracks.registry.CreativeTabRegistry;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
+import dev.psyGamer.immersiveTracks.util.Pair;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
 import dev.psyGamer.immersiveTracks.util.model.AdvancedBoundingBox;
 import net.minecraft.block.material.Material;
@@ -20,8 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
@@ -29,21 +29,70 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyBool UPDATE = PropertyBool.create("update"); // TODO don't
 	
-	public static int getBulbColor(final IBlockAccess world, final BlockPos pos, final int bulbIndex) {
-		if (bulbIndex < 0) {
+	private static final List<SignalBlock> SIGNAL_BLOCKS = new ArrayList<>();
+	private final Pair<String, List<Integer>>[] bulbData;
+	
+	public static int getTintColor(final IBlockAccess world, final BlockPos pos, final int bulbIndex) {
+		if (bulbIndex < 0 || !(world.getTileEntity(pos) instanceof SignalTileEntity)) {
 			return 0xFFFFFF;
 		}
 		
-		return ((SignalTileEntity) Objects.requireNonNull(world.getTileEntity(pos))).getBulbColor(bulbIndex);
+		//noinspection ConstantConditions
+		return ((SignalTileEntity) world.getTileEntity(pos)).getBulbColor(bulbIndex);
 	}
 	
-	public SignalBlock(final String name) {
+	public static List<SignalBlock> getSignalBlocks() {
+		return Collections.unmodifiableList(SignalBlock.SIGNAL_BLOCKS);
+	}
+	
+	public Pair<String, List<Integer>>[] getBulbData() {
+		return Arrays.copyOf(this.bulbData, this.bulbData.length);
+	}
+	
+	@SafeVarargs
+	public SignalBlock(final String name, final Pair<String, List<Integer>>... bulbData) {
 		super(name, Material.IRON, CreativeTabRegistry.SIGNALS_TAB, new AdvancedBoundingBox(12, 16, 2).center());
 		
 		this.setDefaultState(this.getDefaultState()
 				.withProperty(SignalBlock.FACING, EnumFacing.NORTH)
 				.withProperty(SignalBlock.UPDATE, false)
 		);
+		
+		if (bulbData == null) {
+			throw new IllegalArgumentException("Bulb data may not be null");
+		}
+		
+		for (final Pair<String, List<Integer>> data : bulbData) {
+			if (data.first().isEmpty()) {
+				throw new IllegalArgumentException("Bulb data may not contain an empty string");
+			}
+			if (data.second().isEmpty()) {
+				throw new IllegalArgumentException("Bulb data may not contain an empty color list");
+			}
+		}
+		
+		this.bulbData = bulbData;
+	}
+	
+	@Override
+	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state, final EntityLivingBase placer, final ItemStack stack) {
+		if (!worldIn.isRemote) {
+			final EnumFacing direction = placer.getHorizontalFacing().getOpposite();
+			final IBlockState blockState = this.getDefaultState().withProperty(SignalBlock.FACING, direction);
+			final TileEntity tileEntity = worldIn.getTileEntity(pos);
+			
+			worldIn.setBlockState(pos, blockState);
+			
+			if (tileEntity instanceof SignalTileEntity) {
+				final SignalTileEntity signal = (SignalTileEntity) tileEntity;
+				
+				for (int i = 0 ; i < this.bulbData.length ; i++) {
+					signal.setBulbColor(i, this.bulbData[i].second().get(0));
+				}
+				
+				signal.markForUpdate();
+			}
+		}
 	}
 	
 	@Override
@@ -59,33 +108,12 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 	
 	@Override
 	public void updateTick(final World worldIn, final BlockPos pos, final IBlockState state, final Random rand) {
-		System.out.println("UPDATE TICK");
 		worldIn.setBlockState(pos, state.withProperty(SignalBlock.UPDATE, false));
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, SignalBlock.FACING, SignalBlock.UPDATE);
-	}
-	
-	@Override
-	public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state, final EntityLivingBase placer, final ItemStack stack) {
-		if (!worldIn.isRemote) {
-			final EnumFacing direction = placer.getHorizontalFacing().getOpposite();
-			final IBlockState blockState = this.getDefaultState().withProperty(SignalBlock.FACING, direction);
-			final TileEntity tileEntity = worldIn.getTileEntity(pos);
-			
-			worldIn.setBlockState(pos, blockState);
-			
-			if (tileEntity instanceof SignalTileEntity) {
-				final SignalTileEntity signal = (SignalTileEntity) tileEntity;
-				
-				signal.setBulbColor(0, 0xEE0000);
-				signal.setBulbColor(1, 0x222222);
-				
-				signal.markForUpdate();
-			}
-		}
 	}
 	
 	@Override

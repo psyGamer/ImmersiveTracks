@@ -4,6 +4,7 @@ import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlock;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,11 +64,7 @@ public class SignalTileEntity extends TileEntityBase {
 	
 	@Override
 	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
-		compound.setInteger("bulbs", this.lightBulbs.size());
-		
-		this.lightBulbs.forEach((index, color) -> {
-			compound.setInteger("bulb_" + index, color);
-		});
+		compound.setIntArray("bulbs", ArrayUtils.toPrimitive(this.lightBulbs.values().toArray(new Integer[0])));
 		
 		return super.writeToNBT(compound);
 	}
@@ -76,10 +73,10 @@ public class SignalTileEntity extends TileEntityBase {
 	public void readFromNBT(final NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		final int bulbs = compound.getInteger("bulbs");
+		final int[] bulbs = compound.getIntArray("bulbs");
 		
-		for (int i = 0 ; i < bulbs ; i++) {
-			this.lightBulbs.put(i, compound.getInteger("bulb_" + i));
+		for (int i = 0 ; i < bulbs.length ; i++) {
+			this.lightBulbs.put(i, bulbs[i]);
 		}
 	}
 }

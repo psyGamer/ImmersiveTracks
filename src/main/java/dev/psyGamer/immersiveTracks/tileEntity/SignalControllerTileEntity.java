@@ -3,9 +3,8 @@ package dev.psyGamer.immersiveTracks.tileEntity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SignalControllerTileEntity extends TileEntityBase {
 	
@@ -33,6 +32,12 @@ public class SignalControllerTileEntity extends TileEntityBase {
 			
 			signal.markForUpdate();
 		});
+	}
+	
+	public List<SignalTileEntity> getConnectedSignals() {
+		return this.connectedSignals.values().stream()
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 	}
 	
 	@Override

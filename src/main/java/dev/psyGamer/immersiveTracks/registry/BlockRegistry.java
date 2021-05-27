@@ -3,6 +3,7 @@ package dev.psyGamer.immersiveTracks.registry;
 import dev.psyGamer.immersiveTracks.blocks.ModelBlockBase;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlock;
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalControllerBlock;
+import dev.psyGamer.immersiveTracks.util.Pair;
 import dev.psyGamer.immersiveTracks.util.model.AdvancedBoundingBox;
 import dev.psyGamer.immersiveTracks.util.model.IModelRegistry;
 import net.minecraft.block.Block;
@@ -23,7 +24,11 @@ public class BlockRegistry {
 	
 	private static final List<Block> blocks = new ArrayList<>();
 	
-	public static final Block SIGNAL = new SignalBlock("signal");
+	public static final Block SIGNAL = new SignalBlock("signal",
+			Pair.ofList("Top", 0xEE0000, 0x222222),
+			Pair.ofList("Bottom", 0x222222, 0x00EE00)
+	);
+	
 	public static final Block SIGNAL_POLE = new ModelBlockBase("signal_pole", Material.IRON, CreativeTabRegistry.SIGNALS_TAB,
 			new AdvancedBoundingBox(2, 16, 2).center()
 	);
@@ -49,6 +54,6 @@ public class BlockRegistry {
 	
 	@SideOnly(Side.CLIENT)
 	public static void registerBlockColors() {
-		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> SignalBlock.getBulbColor(worldIn, pos, tintIndex - 10), BlockRegistry.SIGNAL);
+		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> SignalBlock.getTintColor(worldIn, pos, tintIndex - 10), BlockRegistry.SIGNAL);
 	}
 }

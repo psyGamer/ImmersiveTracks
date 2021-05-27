@@ -1,5 +1,6 @@
 package dev.psyGamer.immersiveTracks.blocks.signal;
 
+import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.BlockBase;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import dev.psyGamer.immersiveTracks.registry.CreativeTabRegistry;
@@ -12,8 +13,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -76,6 +79,15 @@ public class SignalControllerBlock extends BlockBase implements ILinkableSource 
 						.updateSignals(worldIn.getBlockState(pos).getValue(SignalControllerBlock.ACTIVE));
 			}
 		}
+	}
+	
+	@Override
+	public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn, final EnumHand hand, final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
+		if (worldIn.isRemote) {
+			playerIn.openGui(ImmersiveTracks.getInstance(), 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		}
+		
+		return true;
 	}
 	
 	@Override
