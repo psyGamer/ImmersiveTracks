@@ -393,17 +393,6 @@
 			}
 		}
 	],
-	"display": {
-		"ground": {
-			"rotation": [0, -90, 0]
-		},
-		"gui": {
-			"rotation": [0, 90, 0]
-		},
-		"fixed": {
-			"rotation": [0, -90, 0]
-		}
-	},
 	"groups": [
 		{
 			"name": "Inner",
