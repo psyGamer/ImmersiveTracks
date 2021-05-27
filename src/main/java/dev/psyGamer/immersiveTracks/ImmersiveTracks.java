@@ -1,7 +1,7 @@
 package dev.psyGamer.immersiveTracks;
 
 import dev.psyGamer.immersiveTracks.creativeTabs.SignalTab;
-import dev.psyGamer.immersiveTracks.proxy.CommonProxy;
+import dev.psyGamer.immersiveTracks.proxy.IProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -28,7 +28,7 @@ public class ImmersiveTracks {
 			serverSide = "dev.psyGamer.immersiveTracks.proxy.CommonProxy",
 			clientSide = "dev.psyGamer.immersiveTracks.proxy.ClientProxy"
 	)
-	private static CommonProxy proxy;
+	private static IProxy proxy;
 	
 	@Mod.EventHandler
 	public static void preInit(final FMLPreInitializationEvent event) {
@@ -50,7 +50,7 @@ public class ImmersiveTracks {
 		return ImmersiveTracks.instance;
 	}
 	
-	public static CommonProxy getProxy() {
+	public static IProxy getProxy() {
 		return ImmersiveTracks.proxy;
 	}
 	

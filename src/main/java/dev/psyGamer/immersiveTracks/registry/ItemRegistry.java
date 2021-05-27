@@ -1,4 +1,4 @@
-package dev.psyGamer.immersiveTracks.init;
+package dev.psyGamer.immersiveTracks.registry;
 
 import dev.psyGamer.immersiveTracks.items.LinkerItem;
 import dev.psyGamer.immersiveTracks.util.model.IModelRegistry;

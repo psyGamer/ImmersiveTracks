@@ -1,6 +1,6 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
-import dev.psyGamer.immersiveTracks.init.TileEntiyRegistry;
+import dev.psyGamer.immersiveTracks.registry.TileEntiyRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

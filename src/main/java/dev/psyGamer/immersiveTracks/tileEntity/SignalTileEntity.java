@@ -1,7 +1,7 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
 import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlockBase;
-import dev.psyGamer.immersiveTracks.init.BlockRegistry;
+import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 

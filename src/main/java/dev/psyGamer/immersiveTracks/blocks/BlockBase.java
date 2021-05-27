@@ -1,8 +1,8 @@
 package dev.psyGamer.immersiveTracks.blocks;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
-import dev.psyGamer.immersiveTracks.init.BlockRegistry;
-import dev.psyGamer.immersiveTracks.init.ItemRegistry;
+import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
+import dev.psyGamer.immersiveTracks.registry.ItemRegistry;
 import dev.psyGamer.immersiveTracks.util.model.IModelRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

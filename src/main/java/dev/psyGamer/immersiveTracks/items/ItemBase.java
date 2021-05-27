@@ -1,7 +1,7 @@
 package dev.psyGamer.immersiveTracks.items;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
-import dev.psyGamer.immersiveTracks.init.ItemRegistry;
+import dev.psyGamer.immersiveTracks.registry.ItemRegistry;
 import dev.psyGamer.immersiveTracks.util.model.IModelRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;

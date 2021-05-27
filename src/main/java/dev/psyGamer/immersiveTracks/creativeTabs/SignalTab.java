@@ -1,6 +1,6 @@
 package dev.psyGamer.immersiveTracks.creativeTabs;
 
-import dev.psyGamer.immersiveTracks.init.BlockRegistry;
+import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 

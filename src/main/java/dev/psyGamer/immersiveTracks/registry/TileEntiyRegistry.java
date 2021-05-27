@@ -1,4 +1,4 @@
-package dev.psyGamer.immersiveTracks.init;
+package dev.psyGamer.immersiveTracks.registry;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalControllerTileEntity;

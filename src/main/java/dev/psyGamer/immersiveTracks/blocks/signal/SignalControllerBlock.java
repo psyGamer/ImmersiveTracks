@@ -2,7 +2,7 @@ package dev.psyGamer.immersiveTracks.blocks.signal;
 
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.blocks.BlockBase;
-import dev.psyGamer.immersiveTracks.init.BlockRegistry;
+import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalControllerTileEntity;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import dev.psyGamer.immersiveTracks.util.RedstoneUtil;
