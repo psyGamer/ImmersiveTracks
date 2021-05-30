@@ -25,8 +25,8 @@ public class BlockRegistry {
 	private static final List<Block> blocks = new ArrayList<>();
 	
 	public static final Block SIGNAL = new SignalBlock("signal",
-			Pair.ofList("Top", 0xEE0000, 0x222222),
-			Pair.ofList("Bottom", 0x222222, 0x00EE00)
+			Pair.ofMap("Top", Pair.of(0xEE0000, "Red"), Pair.of(0x222222, "Black")),
+			Pair.ofMap("Bottom", Pair.of(0x222222, "Black"), Pair.of(0x00EE00, "Green"))
 	);
 	
 	public static final Block SIGNAL_POLE = new ModelBlockBase("signal_pole", Material.IRON, CreativeTabRegistry.SIGNALS_TAB,

@@ -30,7 +30,8 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 	public static final PropertyBool UPDATE = PropertyBool.create("update"); // TODO don't
 	
 	private static final List<SignalBlock> SIGNAL_BLOCKS = new ArrayList<>();
-	private final Pair<String, List<Integer>>[] bulbData;
+	private final Map<String, List<Integer>> bulbColors;
+	private final Map<Integer, String> colorNames;
 	
 	public static int getTintColor(final IBlockAccess world, final BlockPos pos, final int bulbIndex) {
 		if (bulbIndex < 0 || !(world.getTileEntity(pos) instanceof SignalTileEntity)) {
@@ -45,24 +46,24 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 		return Collections.unmodifiableList(SignalBlock.SIGNAL_BLOCKS);
 	}
 	
-	public Pair<String, List<Integer>>[] getBulbData() {
-		return Arrays.copyOf(this.bulbData, this.bulbData.length);
+	public Map<String, List<Integer>> getBulbColors() {
+		return Collections.unmodifiableMap(this.bulbColors);
+	}
+	
+	public Map<Integer, String> getColorNames() {
+		return Collections.unmodifiableMap(this.colorNames);
 	}
 	
 	@SafeVarargs
-	public SignalBlock(final String name, final Pair<String, List<Integer>>... bulbData) {
+	@SuppressWarnings("unchecked")
+	public SignalBlock(final String name, final Pair<String, Map<Integer, String>>... bulbData) {
 		super(name, Material.IRON, CreativeTabRegistry.SIGNALS_TAB, new AdvancedBoundingBox(12, 16, 2).center());
-		
-		this.setDefaultState(this.getDefaultState()
-				.withProperty(SignalBlock.FACING, EnumFacing.NORTH)
-				.withProperty(SignalBlock.UPDATE, false)
-		);
 		
 		if (bulbData == null) {
 			throw new IllegalArgumentException("Bulb data may not be null");
 		}
 		
-		for (final Pair<String, List<Integer>> data : bulbData) {
+		for (final Pair<String, Map<Integer, String>> data : bulbData) {
 			if (data.first().isEmpty()) {
 				throw new IllegalArgumentException("Bulb data may not contain an empty string");
 			}
@@ -71,7 +72,18 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 			}
 		}
 		
-		this.bulbData = bulbData;
+		this.setDefaultState(this.getDefaultState()
+				.withProperty(SignalBlock.FACING, EnumFacing.NORTH)
+				.withProperty(SignalBlock.UPDATE, false)
+		);
+		
+		this.bulbColors = Pair.pairsToMap(Arrays.stream(bulbData)
+				.map(data -> Pair.of(data.first(), new ArrayList<>(data.second().keySet()))).toArray(Pair[]::new));
+		
+		this.colorNames = Pair.pairsToMap(Arrays.stream(bulbData)
+				.map(data -> Pair.of(data.second().keySet(), data.second().values())).toArray(Pair[]::new));
+		
+		SignalBlock.SIGNAL_BLOCKS.add(this);
 	}
 	
 	@Override
@@ -86,8 +98,12 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 			if (tileEntity instanceof SignalTileEntity) {
 				final SignalTileEntity signal = (SignalTileEntity) tileEntity;
 				
-				for (int i = 0 ; i < this.bulbData.length ; i++) {
-					signal.setBulbColor(i, this.bulbData[i].second().get(0));
+				int index = 0;
+				
+				for (final List<Integer> colors : this.bulbColors.values()) {
+					signal.setBulbColor(index, colors.get(0));
+					
+					index++;
 				}
 				
 				signal.markForUpdate();
