@@ -1,7 +1,9 @@
 package dev.psyGamer.immersiveTracks.util;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +30,29 @@ public class Pair <A, B> {
 	@SafeVarargs
 	public static <A, B> Pair<A, List<B>> ofList(final A a, final B... b) {
 		return new Pair<>(a, Arrays.stream(b).collect(Collectors.toList()));
+	}
+	
+	@SafeVarargs
+	@SuppressWarnings("unchecked")
+	public static <A, B, C> Pair<A, Map<B, C>> ofMap(final A a, final Pair<B, C>... b) {
+		return (Pair<A, Map<B, C>>) Arrays.stream(b).collect(Collectors.toMap(pair -> pair.first, pair -> pair.second));
+	}
+	
+	public static <A, B> List<Pair<A, B>> mapToPairList(final Map<A, B> map) {
+		return map.keySet().stream()
+				.map(key -> Pair.of(key, map.get(key)))
+				.collect(Collectors.toList());
+	}
+	
+	@SafeVarargs
+	public static <A, B> Map<A, B> pairsToMap(final Pair<A, B>... pairs) {
+		final Map<A, B> map = new HashMap<>();
+		
+		for (final Pair<A, B> pair : pairs) {
+			map.put(pair.first(), pair.second());
+		}
+		
+		return map;
 	}
 	
 	public A first() {
