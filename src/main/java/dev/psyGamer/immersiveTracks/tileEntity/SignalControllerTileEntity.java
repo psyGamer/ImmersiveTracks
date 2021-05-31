@@ -2,6 +2,7 @@ package dev.psyGamer.immersiveTracks.tileEntity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ public class SignalControllerTileEntity extends TileEntityBase {
 	
 	public void addSignal(final SignalTileEntity tileEntity) {
 		this.connectedSignals.put(tileEntity.getPos(), tileEntity);
+		this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), Constants.BlockFlags.DEFAULT);
 		this.markDirty();
 	}
 	

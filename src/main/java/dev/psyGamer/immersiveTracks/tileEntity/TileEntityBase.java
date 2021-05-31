@@ -38,7 +38,7 @@ public class TileEntityBase extends TileEntity {
 	
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.getPos(), 1, this.getUpdateTag());
+		return new SPacketUpdateTileEntity(this.getPos(), 0, this.getUpdateTag());
 	}
 	
 	@Override
