@@ -3,6 +3,7 @@ package dev.psyGamer.immersiveTracks.blocks.signal;
 import dev.psyGamer.immersiveTracks.blocks.ModelBlockBase;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import dev.psyGamer.immersiveTracks.registry.CreativeTabRegistry;
+import dev.psyGamer.immersiveTracks.signals.SignalPreset;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import dev.psyGamer.immersiveTracks.util.Pair;
 import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
@@ -30,8 +31,8 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 	public static final PropertyBool UPDATE = PropertyBool.create("update"); // TODO don't
 	
 	private static final List<SignalBlock> SIGNAL_BLOCKS = new ArrayList<>();
-	private final Map<String, List<Integer>> bulbColors;
-	private final Map<Integer, String> colorNames;
+	private final Map<String, List<Integer>> bulbColors = new HashMap<>();
+	private final Map<Integer, String> colorNames = new HashMap<>();
 	
 	public static int getTintColor(final IBlockAccess world, final BlockPos pos, final int bulbIndex) {
 		if (bulbIndex < 0 || !(world.getTileEntity(pos) instanceof SignalTileEntity)) {
@@ -50,11 +51,10 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 		return Collections.unmodifiableMap(this.bulbColors);
 	}
 	
-	public Map<Integer, String> getColorNames() {
-		return Collections.unmodifiableMap(this.colorNames);
+	public String getColorName(final int color) {
+		return this.colorNames.get(color);
 	}
 	
-	@SafeVarargs
 	@SuppressWarnings("unchecked")
 	public SignalBlock(final String name, final Pair<String, Map<Integer, String>>... bulbData) {
 		super(name, Material.IRON, CreativeTabRegistry.SIGNALS_TAB, new AdvancedBoundingBox(12, 16, 2).center());
@@ -70,6 +70,10 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 			if (data.second().isEmpty()) {
 				throw new IllegalArgumentException("Bulb data may not contain an empty color list");
 			}
+			
+			this.bulbColors.put(data.first(), new ArrayList<>(data.second().keySet()));
+			
+			data.second().forEach(this.colorNames::put);
 		}
 		
 		this.setDefaultState(this.getDefaultState()
@@ -77,13 +81,9 @@ public class SignalBlock extends ModelBlockBase implements ILinkableTarget {
 				.withProperty(SignalBlock.UPDATE, false)
 		);
 		
-		this.bulbColors = Pair.pairsToMap(Arrays.stream(bulbData)
-				.map(data -> Pair.of(data.first(), new ArrayList<>(data.second().keySet()))).toArray(Pair[]::new));
-		
-		this.colorNames = Pair.pairsToMap(Arrays.stream(bulbData)
-				.map(data -> Pair.of(data.second().keySet(), data.second().values())).toArray(Pair[]::new));
-		
 		SignalBlock.SIGNAL_BLOCKS.add(this);
+		
+		new SignalPreset("Default", this);
 	}
 	
 	@Override

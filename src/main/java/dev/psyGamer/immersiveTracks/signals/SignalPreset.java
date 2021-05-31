@@ -60,10 +60,7 @@ public class SignalPreset {
 		this.signal = signal;
 		this.bulbStyles = SignalPreset.generateDefaultBulbStyles(signal);
 		
-		if (!SignalPreset.signalPresets.containsKey(signal)) {
-			SignalPreset.signalPresets.put(signal, new ArrayList<>());
-		}
-		
+		SignalPreset.signalPresets.put(signal, new ArrayList<>());
 		SignalPreset.signalPresets.get(signal).add(this);
 	}
 	

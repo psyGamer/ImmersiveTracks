@@ -33,9 +33,8 @@ public class Pair <A, B> {
 	}
 	
 	@SafeVarargs
-	@SuppressWarnings("unchecked")
 	public static <A, B, C> Pair<A, Map<B, C>> ofMap(final A a, final Pair<B, C>... b) {
-		return (Pair<A, Map<B, C>>) Arrays.stream(b).collect(Collectors.toMap(pair -> pair.first, pair -> pair.second));
+		return Pair.of(a, Arrays.stream(b).collect(Collectors.toMap(pair -> pair.first, pair -> pair.second)));
 	}
 	
 	public static <A, B> List<Pair<A, B>> mapToPairList(final Map<A, B> map) {
