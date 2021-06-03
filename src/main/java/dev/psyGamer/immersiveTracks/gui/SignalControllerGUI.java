@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import org.lwjgl.input.Keyboard;
@@ -38,10 +39,20 @@ public class SignalControllerGUI extends GuiScreen {
 			}
 		}
 		
-		this.currentPreset = SignalPreset.getSignalPresets().get(this.currentSignal).get(0);
+		if (this.currentSignal == null) {
+			return;
+		}
+		
+		if (!SignalPreset.getSignalPresets().get(this.currentSignal).isEmpty()) {
+			this.currentPreset = SignalPreset.getSignalPresets().get(this.currentSignal).get(0);
+		}
 	}
 	
 	private GuiButtonExt signalButton;
+	private GuiButtonExt createPresetButton;
+	private GuiButtonExt deletePresetButton;
+	private GuiTextField presetNameField;
+	
 	private final List<GuiButtonExt> signalPresetButtons = new ArrayList<>();
 	
 	private final List<GuiButtonExt> presetSignalColorButtons = new ArrayList<>();
@@ -55,16 +66,23 @@ public class SignalControllerGUI extends GuiScreen {
 			return;
 		}
 		
-		this.signalButton = new GuiButtonExt(0, 200, 300, this.signalBlockNames.get(this.currentSignal));
-		
-		for (int i = 0 ; i < SignalPreset.getSignalPresets().get(this.currentSignal).size() ; i++) {
-			this.signalPresetButtons.add(new GuiButtonExt(i + 1, 0, i * 30 + 20, SignalPreset.getSignalPresets().get(this.currentSignal).get(i).getName()));
-		}
-		
-		this.updatePresetScreen();
+		this.signalButton = new GuiButtonExt(-3, 200, 300, this.signalBlockNames.get(this.currentSignal));
+		this.createPresetButton = new GuiButtonExt(-2, 100, 200, "+");
 		
 		this.buttonList.add(this.signalButton);
-		this.buttonList.addAll(this.signalPresetButtons);
+		this.buttonList.add(this.createPresetButton);
+		
+		if (this.currentPreset == null) {
+			System.out.println("Fuck you, es ist null");
+			return;
+		}
+		
+		this.deletePresetButton = new GuiButtonExt(-1, 0, 0, TextFormatting.RED + "Delete Preset");
+		
+		this.updatePresetList();
+		this.updatePresetScreen();
+		
+		this.buttonList.add(this.deletePresetButton);
 	}
 	
 	@Override
@@ -75,18 +93,20 @@ public class SignalControllerGUI extends GuiScreen {
 		
 		if (button.id == this.signalButton.id) {
 			this.nextSignal();
+		} else if (button.id == this.createPresetButton.id) {
+			this.addNewPreset();
+		} else if (button.id == this.deletePresetButton.id) {
+			this.removePreset();
 		} else if (button.id >= 1 && button.id <= SignalPreset.getSignalPresets().get(this.currentSignal).size()) {
 			this.currentPreset = SignalPreset.getSignalPresets().get(this.currentSignal).get(button.id - 1);
-		} else if (button.id > SignalPreset.getSignalPresets().get(this.currentSignal).size()) {
-			final int buttonTypeId = (button.id - SignalPreset.getSignalPresets().get(this.currentSignal).size() - 1) % 4;
 			
-			switch (buttonTypeId) {
-				case 0:
-					this.nextSignalColor(button);
-					break;
-				case 1:
-					this.updateToggle((GuiCheckBox) button);
-					break;
+			this.updatePresetList();
+			this.updatePresetScreen();
+		} else if (button.id > SignalPreset.getSignalPresets().get(this.currentSignal).size()) {
+			if (button instanceof GuiButtonExt) {
+				this.nextSignalColor(button);
+			} else if (button instanceof GuiCheckBox) {
+				this.updateToggle((GuiCheckBox) button);
 			}
 		}
 	}
@@ -94,8 +114,10 @@ public class SignalControllerGUI extends GuiScreen {
 	@Override
 	public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
 		this.drawDefaultBackground();
-
-//		this.box.drawButton(this.mc, mouseX, mouseY, partialTicks);
+		
+		if (this.presetNameField != null) {
+			this.presetNameField.drawTextBox();
+		}
 		
 		this.presetShouldFlashButtons.forEach(button -> {
 			button.drawButton(this.mc, mouseX, mouseY, partialTicks);
@@ -109,6 +131,10 @@ public class SignalControllerGUI extends GuiScreen {
 	@Override
 	protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
 //		this.box.mousePressed(this.mc, mouseX, mouseY);
+		
+		if (this.presetNameField != null) {
+			this.presetNameField.mouseClicked(mouseX, mouseY, mouseButton);
+		}
 		
 		this.presetsOnTimeFields.forEach(field -> field.mouseClicked(mouseX, mouseY, mouseButton));
 		this.presetsOffTimeFields.forEach(field -> field.mouseClicked(mouseX, mouseY, mouseButton));
@@ -132,10 +158,56 @@ public class SignalControllerGUI extends GuiScreen {
 			return;
 		}
 		
-		this.presetsOnTimeFields.forEach(field -> field.textboxKeyTyped(typedChar, keyCode));
-		this.presetsOffTimeFields.forEach(field -> field.textboxKeyTyped(typedChar, keyCode));
+		if (this.presetNameField != null) {
+			this.presetNameField.textboxKeyTyped(typedChar, keyCode);
+			
+			if (this.presetNameField.getText().isEmpty()) {
+				this.currentPreset.name = TextFormatting.GRAY + "< No name >";
+			} else {
+				this.currentPreset.name = this.presetNameField.getText();
+			}
+			
+			this.updatePresetList();
+		}
+		
+		this.presetsOnTimeFields.forEach(field -> {
+			field.textboxKeyTyped(typedChar, keyCode);
+			
+			if (field.isFocused()) {
+				this.updateOnTime(field);
+			}
+		});
+		this.presetsOffTimeFields.forEach(field -> {
+			field.textboxKeyTyped(typedChar, keyCode);
+			
+			if (field.isFocused()) {
+				this.updateOffTime(field);
+			}
+		});
 		
 		super.keyTyped(typedChar, keyCode);
+	}
+	
+	private void addNewPreset() {
+		new SignalPreset("New Preset", this.currentSignal);
+	}
+	
+	private void removePreset() {
+		final int currentIndex = SignalPreset.getSignalPresets().get(this.currentSignal).indexOf(this.currentPreset);
+		final int nextIndex = currentIndex == 0 ? 0 : currentIndex - 1;
+		
+		SignalPreset.getSignalPresets().get(this.currentSignal).remove(this.currentPreset);
+		
+		if (SignalPreset.getSignalPresets().get(this.currentSignal).isEmpty()) {
+			this.currentPreset = null;
+			
+			return;
+		}
+		
+		this.currentPreset = SignalPreset.getSignalPresets().get(this.currentSignal).get(nextIndex);
+		
+		this.updatePresetList();
+		this.updatePresetScreen();
 	}
 	
 	private void nextSignal() {
@@ -157,16 +229,42 @@ public class SignalControllerGUI extends GuiScreen {
 	private void updateToggle(final GuiCheckBox checkBox) {
 		this.getBulbStyle(checkBox.id).shouldFlash = checkBox.isChecked();
 		
-		this.presetsOnTimeFields.forEach(field -> field.setEnabled(checkBox.isChecked()));
-		this.presetsOffTimeFields.forEach(field -> field.setEnabled(checkBox.isChecked()));
+		final int index = this.presetShouldFlashButtons.indexOf(checkBox);
+		
+		this.presetsOnTimeFields.get(index).setEnabled(checkBox.isChecked());
+		this.presetsOffTimeFields.get(index).setEnabled(checkBox.isChecked());
 	}
 	
 	private void updateOnTime(final GuiTextField textField) {
-		this.getBulbStyle(textField.getId()).onTime = Integer.parseInt(textField.getText());
+		try {
+			this.getBulbStyle(textField.getId()).onTime = Math.max(1, Integer.parseInt(textField.getText()));
+		} catch (final NumberFormatException ex) {
+			this.getBulbStyle(textField.getId()).onTime = 1;
+		}
 	}
 	
 	private void updateOffTime(final GuiTextField textField) {
-		this.getBulbStyle(textField.getId()).offTime = Integer.parseInt(textField.getText());
+		try {
+			this.getBulbStyle(textField.getId()).offTime = Math.max(1, Integer.parseInt(textField.getText()));
+		} catch (final NumberFormatException ex) {
+			this.getBulbStyle(textField.getId()).offTime = 1;
+		}
+	}
+	
+	private void updatePresetList() {
+		this.buttonList.removeAll(this.signalPresetButtons);
+		this.signalPresetButtons.clear();
+		
+		for (int i = 0 ; i < SignalPreset.getSignalPresets().get(this.currentSignal).size() ; i++) {
+			final GuiButtonExt btn = new GuiButtonExt(i + 1, 0, i * 30 + 20, SignalPreset.getSignalPresets().get(this.currentSignal).get(i).name);
+			if (SignalPreset.getSignalPresets().get(this.currentSignal).indexOf(this.currentPreset) == i) {
+				btn.enabled = false;
+			}
+			
+			this.signalPresetButtons.add(btn);
+		}
+		
+		this.buttonList.addAll(this.signalPresetButtons);
 	}
 	
 	private void updatePresetScreen() {
@@ -186,6 +284,7 @@ public class SignalControllerGUI extends GuiScreen {
 		}
 		
 		this.presetSignalColorButtons.forEach(button -> button.displayString = this.currentSignal.getColorName(this.getBulbStyle(button.id).currentColor));
+		this.presetShouldFlashButtons.forEach(checkBox -> checkBox.setIsChecked(this.getBulbStyle(checkBox.id).shouldFlash));
 		
 		this.presetsOnTimeFields.forEach(field -> {
 			final SignalPreset.BulbStyle style = this.getBulbStyle(field.getId());
@@ -200,6 +299,9 @@ public class SignalControllerGUI extends GuiScreen {
 			field.setText(String.valueOf(style.offTime));
 			
 		});
+		
+		this.presetNameField = new GuiTextField(0, this.fontRenderer, 300, 10, 100, 16);
+		this.presetNameField.setText(this.currentPreset.name);
 		
 		this.buttonList.addAll(this.presetSignalColorButtons);
 		this.buttonList.addAll(this.presetShouldFlashButtons);

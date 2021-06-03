@@ -35,7 +35,7 @@ public class SignalPreset {
 		}
 	}
 	
-	private final String name;
+	public String name;
 	private final SignalBlock signal;
 	private final List<BulbStyle> bulbStyles;
 	
@@ -60,12 +60,11 @@ public class SignalPreset {
 		this.signal = signal;
 		this.bulbStyles = SignalPreset.generateDefaultBulbStyles(signal);
 		
-		SignalPreset.signalPresets.put(signal, new ArrayList<>());
+		if (!SignalPreset.signalPresets.containsKey(signal)) {
+			SignalPreset.signalPresets.put(signal, new ArrayList<>());
+		}
+		
 		SignalPreset.signalPresets.get(signal).add(this);
-	}
-	
-	public String getName() {
-		return this.name;
 	}
 	
 	public SignalBlock getSignal() {
