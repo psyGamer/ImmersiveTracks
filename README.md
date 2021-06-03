@@ -1,2 +1,2 @@
 # TempleTribes
-The improves the Vanilla temples
+Improves the Vanilla temples
