@@ -1,10 +1,11 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
-import dev.psyGamer.immersiveTracks.blocks.signal.SignalBlock;
-import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import org.apache.commons.lang3.ArrayUtils;
+import dev.psyGamer.immersiveTracks.block.SignalBlock;
+
+import cam72cam.mod.block.BlockEntity;
+import cam72cam.mod.item.ItemStack;
+import cam72cam.mod.serialization.SerializationException;
+import cam72cam.mod.serialization.TagCompound;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @see SignalBlock SignalBlockBase
  * @since 1.0
  */
-public class SignalTileEntity extends TileEntityBase {
+public class SignalTileEntity extends BlockEntity {
 	
 	private final Map<Integer, Integer> lightBulbs = new HashMap<>();
 	
@@ -53,30 +54,29 @@ public class SignalTileEntity extends TileEntityBase {
 	}
 	
 	public void markForUpdate() {
-		final IBlockState oldState = this.world.getBlockState(this.pos);
-		final IBlockState newState = oldState.withProperty(SignalBlock.UPDATE,
-				!oldState.getValue(SignalBlock.UPDATE));
-		
 		this.markDirty();
-		this.world.setBlockState(this.pos, newState);
-		this.world.scheduleUpdate(this.pos, BlockRegistry.SIGNAL, 10);
+		this.getWorld().setBlock(this.getPos(), this.getWorld().getBlock(this.getPos()));
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
-		compound.setIntArray("bulbs", ArrayUtils.toPrimitive(this.lightBulbs.values().toArray(new Integer[0])));
+	public void save(final TagCompound compound) throws SerializationException {
+		compound.setInteger("bulbs", this.lightBulbs.size());
+		this.lightBulbs.forEach((element, index) -> compound.setInteger("bulb" + index, element));
 		
-		return super.writeToNBT(compound);
+		super.save(compound);
 	}
 	
 	@Override
-	public void readFromNBT(final NBTTagCompound compound) {
-		super.readFromNBT(compound);
+	public void load(final TagCompound compound) throws SerializationException {
+		super.load(compound);
 		
-		final int[] bulbs = compound.getIntArray("bulbs");
-		
-		for (int i = 0 ; i < bulbs.length ; i++) {
-			this.lightBulbs.put(i, bulbs[i]);
+		for (int i = 0 ; i < compound.getInteger("bulbs") ; i++) {
+			this.lightBulbs.put(i, compound.getInteger("bulb" + i));
 		}
+	}
+	
+	@Override
+	public ItemStack onPick() {
+		return ItemStack.EMPTY;
 	}
 }
