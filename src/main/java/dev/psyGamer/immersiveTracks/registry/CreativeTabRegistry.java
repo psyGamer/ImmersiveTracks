@@ -1,9 +1,11 @@
 package dev.psyGamer.immersiveTracks.registry;
 
-import dev.psyGamer.immersiveTracks.creativeTabs.SignalTab;
-import net.minecraft.creativetab.CreativeTabs;
+import cam72cam.mod.item.CreativeTab;
+import cam72cam.mod.item.ItemStack;
 
 public class CreativeTabRegistry {
 	
-	public static final CreativeTabs SIGNALS_TAB = new SignalTab();
+	public static final CreativeTab SIGNALS_TAB = new CreativeTab(
+			"immersivetracks.signals", () -> new ItemStack(ItemRegistry.SIGNAL_ITEM, 1)
+	);
 }
