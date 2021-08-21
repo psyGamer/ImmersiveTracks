@@ -9,7 +9,7 @@ import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
-import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
+import dev.psyGamer.immersiveTracks.util.linking.LinkableBlockEntityTarget;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.Map;
  * @see SignalBlock SignalBlockBase
  * @since 1.0
  */
-public class SignalTileEntity extends BlockEntity implements ILinkableTarget {
+public class SignalTileEntity extends LinkableBlockEntityTarget {
 	
 	private final Map<Integer, Integer> lightBulbs = new HashMap<>();
 	
