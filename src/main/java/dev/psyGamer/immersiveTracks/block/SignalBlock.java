@@ -3,6 +3,9 @@ package dev.psyGamer.immersiveTracks.block;
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.block.BlockTypeEntity;
 
+import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.world.World;
+
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import dev.psyGamer.immersiveTracks.signals.SignalPreset;
@@ -14,8 +17,6 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import java.util.*;
 
@@ -28,13 +29,12 @@ public class SignalBlock extends BlockTypeEntity implements ILinkableTarget {
 	private final Map<String, List<Integer>> bulbColors = new HashMap<>();
 	private final Map<Integer, String> colorNames = new HashMap<>();
 	
-	public static int getTintColor(final IBlockAccess world, final BlockPos pos, final int bulbIndex) {
-		if (bulbIndex < 0 || !(world.getTileEntity(pos) instanceof SignalTileEntity)) {
+	public static int getTintColor(final World world, final Vec3i pos, final int bulbIndex) {
+		if (bulbIndex < 0 || world.getBlockEntity(pos, SignalTileEntity.class) != null) {
 			return 0xFFFFFF;
 		}
 		
-		//noinspection ConstantConditions
-		return ((SignalTileEntity) world.getTileEntity(pos)).getBulbColor(bulbIndex);
+		return world.getBlockEntity(pos, SignalTileEntity.class).getBulbColor(bulbIndex);
 	}
 	
 	public static List<SignalBlock> getSignalBlocks() {
@@ -49,9 +49,8 @@ public class SignalBlock extends BlockTypeEntity implements ILinkableTarget {
 		return this.colorNames.get(color);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SafeVarargs
 	public SignalBlock(final String name, final Pair<String, Map<Integer, String>>... bulbData) {
-//		super(name, Material.IRON, CreativeTabRegistry.SIGNALS_TAB, new AdvancedBoundingBox(12, 16, 2).center());
 		super(ImmersiveTracks.MODID, name);
 		
 		if (bulbData == null) {
@@ -76,8 +75,8 @@ public class SignalBlock extends BlockTypeEntity implements ILinkableTarget {
 	}
 	
 	@Override
-	public boolean isValidSource(final World world, final BlockPos pos) {
-		return world.getBlockState(pos).getBlock() == BlockRegistry.SIGNAL_CONTROLLER;
+	public boolean isValidSource(final World world, final Vec3i pos) {
+		return world.isBlock(pos, BlockRegistry.SIGNAL_CONTROLLER);
 	}
 	
 	@Override

@@ -1,9 +1,9 @@
 package dev.psyGamer.immersiveTracks.util.linking;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.world.World;
 
 public interface ILinkableTarget {
 	
-	boolean isValidSource(World world, BlockPos pos);
+	boolean isValidSource(World world, Vec3i pos);
 }
