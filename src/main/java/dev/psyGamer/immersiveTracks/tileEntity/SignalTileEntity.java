@@ -1,11 +1,15 @@
 package dev.psyGamer.immersiveTracks.tileEntity;
 
+import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.world.World;
 import dev.psyGamer.immersiveTracks.block.SignalBlock;
 
 import cam72cam.mod.block.BlockEntity;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
+import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
+import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +22,7 @@ import java.util.Map;
  * @see SignalBlock SignalBlockBase
  * @since 1.0
  */
-public class SignalTileEntity extends BlockEntity {
+public class SignalTileEntity extends BlockEntity implements ILinkableTarget {
 	
 	private final Map<Integer, Integer> lightBulbs = new HashMap<>();
 	
@@ -78,5 +82,10 @@ public class SignalTileEntity extends BlockEntity {
 	@Override
 	public ItemStack onPick() {
 		return ItemStack.EMPTY;
+	}
+	
+	@Override
+	public boolean isValidSource(final World world, final Vec3i pos) {
+		return world.isBlock(pos, BlockRegistry.SIGNAL_CONTROLLER);
 	}
 }

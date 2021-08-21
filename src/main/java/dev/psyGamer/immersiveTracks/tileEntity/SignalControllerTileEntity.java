@@ -6,12 +6,15 @@ import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.SerializationException;
 import cam72cam.mod.serialization.TagCompound;
 
+import cam72cam.mod.world.World;
 import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
+import dev.psyGamer.immersiveTracks.util.linking.ILinkableSource;
+import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SignalControllerTileEntity extends BlockEntity {
+public class SignalControllerTileEntity extends BlockEntity implements ILinkableSource {
 	
 	private final Map<Vec3i, SignalTileEntity> connectedSignals = new HashMap();
 	
@@ -87,5 +90,15 @@ public class SignalControllerTileEntity extends BlockEntity {
 	@Override
 	public ItemStack onPick() {
 		return ItemStack.EMPTY;
+	}
+	
+	@Override
+	public void onLink(final World world, final ILinkableTarget target) {
+		this.addSignal((SignalTileEntity) target);
+	}
+	
+	@Override
+	public boolean isValidTarget(final World world, final Vec3i pos) {
+		return world.isBlock(pos, BlockRegistry.SIGNAL);
 	}
 }

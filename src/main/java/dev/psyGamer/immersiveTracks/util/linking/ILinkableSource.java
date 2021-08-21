@@ -5,7 +5,7 @@ import cam72cam.mod.world.World;
 
 public interface ILinkableSource {
 	
-	void onLink(World world, Vec3i source, Vec3i target);
+	void onLink(World world, ILinkableTarget target);
 	
 	boolean isValidTarget(World world, Vec3i pos);
 }

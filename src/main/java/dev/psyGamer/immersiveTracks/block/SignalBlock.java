@@ -11,16 +11,14 @@ import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
 import dev.psyGamer.immersiveTracks.signals.SignalPreset;
 import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import dev.psyGamer.immersiveTracks.util.Pair;
-import dev.psyGamer.immersiveTracks.util.linking.ILinkableTarget;
 
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
-public class SignalBlock extends BlockTypeEntity implements ILinkableTarget {
+public class SignalBlock extends BlockTypeEntity {
 	
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyBool UPDATE = PropertyBool.create("update"); // TODO don't
@@ -72,11 +70,6 @@ public class SignalBlock extends BlockTypeEntity implements ILinkableTarget {
 		SignalBlock.SIGNAL_BLOCKS.add(this);
 		
 		new SignalPreset("Default", this);
-	}
-	
-	@Override
-	public boolean isValidSource(final World world, final Vec3i pos) {
-		return world.isBlock(pos, BlockRegistry.SIGNAL_CONTROLLER);
 	}
 	
 	@Override
