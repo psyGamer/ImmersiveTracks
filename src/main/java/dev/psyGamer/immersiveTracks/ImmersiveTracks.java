@@ -1,63 +1,36 @@
 package dev.psyGamer.immersiveTracks;
 
-import dev.psyGamer.immersiveTracks.gui.GUIHandler;
-import dev.psyGamer.immersiveTracks.proxy.IProxy;
-import dev.psyGamer.immersiveTracks.registry.TileEntiyRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import cam72cam.mod.ModCore;
+import cam72cam.mod.ModEvent;
 
-@Mod(modid = ImmersiveTracks.MODID, name = ImmersiveTracks.NAME, version = "Development")
-public class ImmersiveTracks {
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+public class ImmersiveTracks extends ModCore.Mod {
 	
 	public static final String MODID = "immersivetracks";
 	public static final String NAME = "Immersive Tracks";
+	public static final String VERSION = "0.1.1";
 	
-	private static Logger logger = LogManager.getLogger(ImmersiveTracks.MODID);
+	public static final Logger LOGGER = LogManager.getLogger(ImmersiveTracks.MODID);
 	
-	@Mod.Instance
-	private static ImmersiveTracks instance;
-	
-	@SidedProxy(
-			serverSide = "dev.psyGamer.immersiveTracks.proxy.CommonProxy",
-			clientSide = "dev.psyGamer.immersiveTracks.proxy.ClientProxy"
-	)
-	private static IProxy proxy;
-	
-	@Mod.EventHandler
-	public static void preInit(final FMLPreInitializationEvent event) {
-		ImmersiveTracks.logger = event.getModLog();
-		ImmersiveTracks.proxy.preInit(event);
-		
-		TileEntiyRegistry.registerTileEntities();
+	@Override
+	public String modID() {
+		return ImmersiveTracks.MODID;
 	}
 	
-	@Mod.EventHandler
-	public static void init(final FMLInitializationEvent event) {
-		ImmersiveTracks.proxy.init(event);
-		
-		NetworkRegistry.INSTANCE.registerGuiHandler(ImmersiveTracks.instance, new GUIHandler());
+	@Override
+	public void commonEvent(final ModEvent event) {
+	
 	}
 	
-	@Mod.EventHandler
-	public static void postInit(final FMLPostInitializationEvent event) {
-		ImmersiveTracks.proxy.postInit(event);
+	@Override
+	public void clientEvent(final ModEvent event) {
+	
 	}
 	
-	public static ImmersiveTracks getInstance() {
-		return ImmersiveTracks.instance;
-	}
+	@Override
+	public void serverEvent(final ModEvent event) {
 	
-	public static IProxy getProxy() {
-		return ImmersiveTracks.proxy;
-	}
-	
-	public static Logger getLogger() {
-		return ImmersiveTracks.logger;
 	}
 }
