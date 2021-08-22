@@ -8,6 +8,8 @@ import dev.psyGamer.immersiveTracks.registry.ItemRegistry;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.Optional;
+
 public class ImmersiveTracks extends ModCore.Mod {
 	
 	public static final String MODID = "immersivetracks";

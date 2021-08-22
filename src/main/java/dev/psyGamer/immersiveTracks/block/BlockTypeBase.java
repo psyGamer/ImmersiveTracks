@@ -2,15 +2,18 @@ package dev.psyGamer.immersiveTracks.block;
 
 import cam72cam.mod.block.BlockType;
 import cam72cam.mod.entity.Player;
-import cam72cam.mod.item.CustomItem;
 import cam72cam.mod.item.ItemStack;
 import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
+import cam72cam.mod.resource.Identifier;
+import cam72cam.mod.sound.Audio;
+import cam72cam.mod.sound.ISound;
+import cam72cam.mod.sound.StandardSound;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 
-public class BlockTypeBase extends BlockType {
+public abstract class BlockTypeBase extends BlockType {
 	
 	public BlockTypeBase(final String name) {
 		super(ImmersiveTracks.MODID, name);
@@ -40,5 +43,9 @@ public class BlockTypeBase extends BlockType {
 	
 	@Override
 	public void onNeighborChange(final World world, final Vec3i pos, final Vec3i neighbor) {
+	}
+	
+	public ISound getPlaceSound() {
+		return Audio.newSound(new Identifier("sounds/dig/stone3.ogg"), false, 15, 1);
 	}
 }
