@@ -23,4 +23,7 @@ public class BlockRegistry {
 	
 	public static final BlockType SIGNAL_POLE = new SignalPoleBlock("signal_pole");
 	public static final BlockType SIGNAL_CONTROLLER = new SignalControllerBlock();
+	
+	public static void load() {
+	}
 }

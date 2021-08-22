@@ -3,6 +3,8 @@ package dev.psyGamer.immersiveTracks;
 import cam72cam.mod.ModCore;
 import cam72cam.mod.ModEvent;
 
+import dev.psyGamer.immersiveTracks.registry.BlockRegistry;
+import dev.psyGamer.immersiveTracks.registry.ItemRegistry;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -21,7 +23,12 @@ public class ImmersiveTracks extends ModCore.Mod {
 	
 	@Override
 	public void commonEvent(final ModEvent event) {
-	
+		if (event == ModEvent.CONSTRUCT) {
+			ModCore.Mod.info("Thanks for using Immersive Tracks. Starting common construct now...");
+			
+			BlockRegistry.load();
+			ItemRegistry.load();
+		}
 	}
 	
 	@Override
