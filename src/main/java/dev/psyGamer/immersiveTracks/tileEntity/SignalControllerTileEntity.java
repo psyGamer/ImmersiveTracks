@@ -27,25 +27,6 @@ public class SignalControllerTileEntity extends LinkableBlockEntitySource {
 		this.markDirty();
 	}
 	
-	public void updateSignals(final boolean active) {
-		this.connectedSignals.forEach((position, signal) -> {
-			if (signal == null) {
-				signal = this.getWorld().getBlockEntity(position, SignalTileEntity.class);
-				
-				this.connectedSignals.put(position, signal);
-				
-				if (signal == null) {
-					return;
-				}
-			}
-			
-			signal.setBulbColor(0, active ? 0x222222 : 0xEE0000);
-			signal.setBulbColor(1, active ? 0x00EE00 : 0x222222);
-			
-			signal.markForUpdate();
-		});
-	}
-	
 	public List<SignalTileEntity> getConnectedSignals() {
 		return this.connectedSignals.values().stream()
 				.filter(Objects::nonNull)
