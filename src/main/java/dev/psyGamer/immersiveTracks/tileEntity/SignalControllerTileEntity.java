@@ -101,4 +101,9 @@ public class SignalControllerTileEntity extends LinkableBlockEntitySource {
 	public boolean isValidTarget(final World world, final Vec3i pos) {
 		return world.isBlock(pos, BlockRegistry.SIGNAL);
 	}
+	
+	@Override
+	public String getTranslationKey() {
+		return "tile.signal_controller.name";
+	}
 }

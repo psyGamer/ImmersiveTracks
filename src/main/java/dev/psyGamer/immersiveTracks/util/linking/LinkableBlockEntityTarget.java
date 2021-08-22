@@ -7,4 +7,6 @@ import cam72cam.mod.world.World;
 public abstract class LinkableBlockEntityTarget extends BlockEntity {
 	
 	public abstract boolean isValidSource(World world, Vec3i pos);
+	
+	public abstract String getTranslationKey();
 }

@@ -9,4 +9,6 @@ public abstract class LinkableBlockEntitySource extends BlockEntity {
 	public abstract void onLink(World world, LinkableBlockEntityTarget target);
 	
 	public abstract boolean isValidTarget(World world, Vec3i pos);
+	
+	public abstract String getTranslationKey();
 }

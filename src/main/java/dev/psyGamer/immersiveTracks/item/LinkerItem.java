@@ -8,18 +8,16 @@ import cam72cam.mod.math.Vec3d;
 import cam72cam.mod.math.Vec3i;
 import cam72cam.mod.serialization.TagCompound;
 import cam72cam.mod.text.PlayerMessage;
+import cam72cam.mod.text.TextColor;
+import cam72cam.mod.text.TextUtil;
 import cam72cam.mod.util.Facing;
 import cam72cam.mod.world.World;
+
 import dev.psyGamer.immersiveTracks.ImmersiveTracks;
 import dev.psyGamer.immersiveTracks.ModConfig;
 import dev.psyGamer.immersiveTracks.registry.CreativeTabRegistry;
-import dev.psyGamer.immersiveTracks.tileEntity.SignalTileEntity;
 import dev.psyGamer.immersiveTracks.util.linking.LinkableBlockEntitySource;
 import dev.psyGamer.immersiveTracks.util.linking.LinkableBlockEntityTarget;
-import net.minecraft.block.Block;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.text.TextFormatting;
-import scala.tools.nsc.doc.base.comment.Link;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +32,7 @@ public class LinkerItem extends CustomItem {
 	public ClickResult onClickBlock(final Player player, final World world, final Vec3i pos, final Player.Hand hand, final Facing facing, final Vec3d inBlockPos) {
 		if (world.isServer) {
 			if (player.isCrouching()) {
-				LinkerItem.sendMessage(player, TextFormatting.GRAY + "Stopped linking");
+				LinkerItem.sendMessage(player, TextColor.GRAY + "Stopped linking");
 				
 				player.getHeldItem(hand).setTagCompound(null);
 			}
@@ -48,14 +46,17 @@ public class LinkerItem extends CustomItem {
 			final LinkableBlockEntityTarget targetTileEntity = world.getBlockEntity(pos, LinkableBlockEntityTarget.class);
 			final LinkableBlockEntitySource sourceTileEntity = world.getBlockEntity(pos, LinkableBlockEntitySource.class);
 			
+			final String targetName = targetTileEntity == null ? "" : TextUtil.translate(targetTileEntity.getTranslationKey());
+			final String sourceName = sourceTileEntity == null ? "" : TextUtil.translate(sourceTileEntity.getTranslationKey());
+			
 			if (targetTileEntity != null) {
 				tag.setVec3i("source", pos);
 				tag.setInteger("sourceWorldID", world.getId());
 				
-				LinkerItem.sendMessage(player, TextFormatting.GRAY + "Linking Source...");
+				LinkerItem.sendMessage(player, TextColor.GRAY + "Linking " + sourceName + "...");
 			} else if (sourceTileEntity != null && tag.hasKey("source")) {
 				if (tag.getInteger("sourceWorldID") != world.getId()) {
-					LinkerItem.sendMessage(player, TextFormatting.RED + "You can't link over dimensions");
+					LinkerItem.sendMessage(player, TextColor.RED + "You can't link over dimensions");
 					
 					return ClickResult.ACCEPTED;
 				}
@@ -66,7 +67,7 @@ public class LinkerItem extends CustomItem {
 				final LinkableBlockEntityTarget target = world.getBlockEntity(pos, LinkableBlockEntityTarget.class);
 				
 				if (source == null || target == null) {
-					LinkerItem.sendMessage(player, TextFormatting.RED + "An error occurred, please try again");
+					LinkerItem.sendMessage(player, TextColor.RED + "An error occurred, please try again");
 					
 					if (player.getHeldItem(hand).is(this)) {
 						player.getHeldItem(hand).setTagCompound(null);
@@ -76,24 +77,24 @@ public class LinkerItem extends CustomItem {
 				}
 				
 				if (!(source.isValidTarget(world, pos) || target.isValidSource(world, sourcePos))) {
-					LinkerItem.sendMessage(player, TextFormatting.RED + "Can't link " + ((Block) source).getLocalizedName() + " with " + ((Block) target).getLocalizedName());
+					LinkerItem.sendMessage(player, TextColor.RED + "Can't link " + sourceName + " with " + targetName);
 					
 					return ClickResult.ACCEPTED;
 				}
 				
 				if (LinkerItem.getDistance(sourcePos, pos) > ModConfig.maxLinkingDistance) {
-					LinkerItem.sendMessage(player, TextFormatting.RED + "Blocks are too far apart (Maximum linking distance: " + ModConfig.maxLinkingDistance + ")");
+					LinkerItem.sendMessage(player, TextColor.RED + "Blocks are too far apart (Maximum linking distance: " + ModConfig.maxLinkingDistance + ")");
 					
 					return ClickResult.ACCEPTED;
 				}
 				
 				source.onLink(world, target);
 				
-				LinkerItem.sendMessage(player, TextFormatting.GREEN + "Successfully linked " + ((Block) target).getLocalizedName() + " with " + ((Block) source).getLocalizedName());
+				LinkerItem.sendMessage(player, TextColor.GREEN + "Successfully linked " + targetName + " with " + sourceName);
 				
 				return ClickResult.ACCEPTED;
 			} else if (sourceTileEntity != null) {
-				LinkerItem.sendMessage(player, TextFormatting.RED + "You must link the source first");
+				LinkerItem.sendMessage(player, TextColor.RED + "You must link the source first");
 			}
 			
 			if (targetTileEntity == null && sourceTileEntity == null) {
