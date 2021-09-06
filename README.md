@@ -1,13 +1,10 @@
-# ImmersiveTracks  <a href="https://www.curseforge.com/minecraft/mc-mods/immersive-tracks"><img src="http://cf.way2muchnoise.eu/versions/For%20Minecraft_479645_all.svg"/><a/>
+# ImmersiveTracks <a href="https://www.curseforge.com/minecraft/mc-mods/immersive-tracks"><img src="http://cf.way2muchnoise.eu/versions/For%20Minecraft_479645_all.svg"/><a/>
 
-## This mod is discontinued
+This is mod was created for the use
+with [Immersive Railroading](https://github.com/TeamOpenIndustry/ImmersiveRailroading "Immersive Railroading") and that's also the reason
+it's for Minecraft 1.12.2 <br >
 
-The reason for that is that it is neat to develop something like that, but I'd prefer developing in versions like 1.16 and in the future
-also 1.17 Of course, I could port this mod to 1.16, but that wouldn't really make sense, due to the main tools for automation Immersive
-Railroading is in 1.12 If you want to continue this mod, go for it (would be nice to let me know, so I could link it)
-Maybe I'll continue this mod in the future when Immersive Railroading is mainly on 1.16+, but until then, I won't continue this mod.
-
-# Original README
+### This mod requires [UniversalModCore](https://www.curseforge.com/minecraft/mc-mods/universal-mod-core)
 
 This is mod was created for the use
 with [Immersive Railroading](https://github.com/TeamOpenIndustry/ImmersiveRailroading "Immersive Railroading") and that's also the reason
